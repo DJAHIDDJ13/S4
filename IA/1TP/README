@@ -1,0 +1,9 @@
+To compile
+   make
+
+To launch the program
+   ./wargame
+
+To generate the docs
+   make doc
+

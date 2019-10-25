@@ -9,8 +9,9 @@
 // changed this to accomodate largest f_eval
 #define INFINI 1000000
 
-#define PROF_MAX 7
+#define PROF_MAX 4
 
+// either 1 for alpha beta algorithm or 0 for without
 #define ALPHA_BETA 1
 /*#define DEBUG*/
 
@@ -473,12 +474,12 @@ int f_eval(Pion* jeu, int joueur)
 
    int mult_factor = 75; // this value should represent how much more important the value
    // difference is from the distance difference
-/*
-   // to randomize played games
-   // expected to either add or substract 1 (uniformly) from the evaluation every (rand_step) calls
-   int rand_step = 10; 
-   int rand_add = ((rand() % 2) ? 1 : -1) * ((rand() % rand_step == 0) ? 1 : 0);
-*/
+   /*
+      // to randomize played games
+      // expected to either add or substract 1 (uniformly) from the evaluation every (rand_step) calls
+      int rand_step = 10;
+      int rand_add = ((rand() % 2) ? 1 : -1) * ((rand() % rand_step == 0) ? 1 : 0);
+   */
    return val_diff * mult_factor + dist_diff;// + rand_add;
 }
 
@@ -530,7 +531,7 @@ void f_affiche_stats()
    double average_elapsed_time = 1000.0 * stats.total_elapsed_time / stats.num_AI_calls;
    double average_moves_per_turn = (double)stats.num_tested_moves / stats.num_searched_nodes;
    double average_nodes_per_call = (double)stats.num_searched_nodes / stats.num_AI_calls;
-   
+
    // write to csv file to draw it
    fprintf(output_file, "%s:%d:%g:%g:%g\n", (ALPHA_BETA) ? "true" : "false", PROF_MAX, average_moves_per_turn, average_elapsed_time, average_nodes_per_call);
 
@@ -581,6 +582,9 @@ int f_win_check(int joueur, int* player_counter, int* opponent_counter,
 // algo negamax sans alpha beta
 int f_negamax(Pion* plateau_courant, int profondeur, int joueur, int player_counter, int opponent_counter)
 {
+   // update stats; adding a move to the total
+   stats.num_tested_moves++;
+
    if(profondeur <= 0) {
       return f_eval(plateau_courant, joueur);
    }
@@ -621,15 +625,14 @@ int f_negamax(Pion* plateau_courant, int profondeur, int joueur, int player_coun
 
                      has_next = 0; // if there is at least one move we unset the flag
 
-                     // update stats; adding a move to the total
-                     stats.num_tested_moves++;
 
                      int newval = -f_negamax(plateau_suivant, profondeur - 1, -joueur, player_counter, opponent_counter);
 
-                     // update the maximum value and randomize which maximum is
-                     // chosen 
-                     int rand_step = 5;
-                     if((rand()%rand_step == 0)?newval >= maxval:newval > maxval) {
+                     // update the maximum value and a quick way to randomize which maximum is
+                     // chosen WARNING: not uniform
+                     int rand_step = 2;
+
+                     if((rand() % rand_step == 0) ? newval >= maxval : newval > maxval) {
                         maxval = newval;
 
                         // set the move
@@ -669,6 +672,9 @@ int f_negamax(Pion* plateau_courant, int profondeur, int joueur, int player_coun
 // algo negamax avec alpha beta maximize toujours pour le joueur donné
 int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, int beta, int player_counter, int opponent_counter)
 {
+   // update stats
+   stats.num_tested_moves++;
+
    if(profondeur <= 0) {
       return f_eval(plateau_courant, joueur);
    }
@@ -708,15 +714,14 @@ int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, i
 
                      has_next = 0; // if theres at least one possible move the node is not terminal
 
-                     // update stats
-                     stats.num_tested_moves++;
 
                      int newval = -f_negamax_ab(plateau_suivant, profondeur - 1, -joueur, -beta, -alpha, player_counter, opponent_counter); // note that the alpha and beta are reversed
 
                      // update the maximum value and randomize which maximum is
-                     // chosen 
+                     // chosen
                      int rand_step = 5;
-                     if((rand()%rand_step == 0)? newval >= maxval : newval > maxval) {
+
+                     if((rand() % rand_step == 0) ? newval >= maxval : newval > maxval) {
                         maxval = newval;
 
                         // set the move
@@ -778,16 +783,17 @@ void f_IA(int joueur)
 #endif
 
 
-/* ******************************** WARNING **********************************
- * ******************** THIS IS NOT GOOD NEEDS TO CHANGE *********************
- * What i'm doing here is reverse the board and treat it as if it was the o's
- * turn. this is done because i couldn't figure out the problem with the x player
- * always losing and sacrificing its pawns this seems to be at least
- * a temporary fix, given i didn't have time to fix the real problem in
- * f_negamax_ab and f_negamax.
- * ************************************************************************ */ 
+   /* ******************************** WARNING **********************************
+    * ******************** THIS IS NOT GOOD NEEDS TO CHANGE *********************
+    * What i'm doing here is reverse the board and treat it as if it was the o's
+    * turn. this is done because i couldn't figure out the problem with the x player
+    * always losing and sacrificing its pawns this seems to be at least
+    * a temporary fix, given i didn't have time to fix the real problem in
+    * f_negamax_ab and f_negamax.
+    * ************************************************************************ */
 /////////////////////
    Pion* reversedBoard = f_raz_plateau();
+
    if(joueur == -1) {
       f_copie_plateau(plateauDeJeu, reversedBoard);
    } else {
@@ -803,7 +809,7 @@ void f_IA(int joueur)
 ////////////////////
 
    int eval; // returned value for minimax evaluation
-   
+
    // benchmarking
    clock_t strt, end;
    strt = clock();
@@ -829,10 +835,11 @@ void f_IA(int joueur)
    ///////////////////////////////////////////////
    // reverse back
    if(joueur == 1) {
-      f_bouge_piece(plateauDeJeu, NB_LIGNES-1-fromX, fromY, NB_LIGNES-1-toX, toY, joueur);
+      f_bouge_piece(plateauDeJeu, NB_LIGNES - 1 - fromX, fromY, NB_LIGNES - 1 - toX, toY, joueur);
    } else {
       f_bouge_piece(plateauDeJeu, fromX, fromY, toX, toY, joueur);
    }
+
    free(reversedBoard);
    ////////////////////////////////////////////
 

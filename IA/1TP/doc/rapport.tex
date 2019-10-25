@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{mathtools}
+\usepackage{float}
 
 \title{TP1 IA}
 \author{ABDELMOUMENE Djahid}
@@ -71,51 +72,81 @@ operations unitaires pour effectuer le minimax.
 \end{equation*}
 
 Si on prend $u(p) = c(p) - \frac{cst}{1-F}$ alors:
-\begin{equation*}
-   u(p) =
+\begin{align*}
+   u(p) &=
    \begin{cases}
       N*M - \frac{1}{1-F}              & p = 0 \\
       F * (c(p-1) - \frac{1}{1-F}) + cst & p \geq 1
    \end{cases}
-\end{equation*}
-
-On simplifie:
-\begin{equation*}
-   u(p) =
+\\ 
+    &=
    \begin{cases}
       N*M - \frac{cst}{1-F}  & p = 0 \\
       F * c(p-1)
    \end{cases}
-\end{equation*}
+\end{align*}
 
 Alors $U_p$ est un suite géometrique ou le terme génerale est:
-\begin{equation*}
-   u(p) = u(0) * F^p
-\end{equation*}
-\begin{equation*}
-   u(p) = (N * M - \frac{cst}{1-F}) * F^p
-\end{equation*}
+\begin{align*}
+   u(p) &= u(0) * F^p
+        &= (N * M - \frac{cst}{1-F}) * F^p
+\end{align*}
 
 Alors on peux déduire $c(p)$:
-\begin{equation*}
-   c(p) = u(p) + \frac{cst}{1-F}
-\end{equation*}
-
-\begin{equation*}
-   c(p) = (N * M - \frac{cst}{1-F}) * F^p + \frac{cst}{1-F}
-\end{equation*}
+\begin{align*}
+   c(p) &= u(p) + \frac{cst}{1-F}\\
+        &= (N * M - \frac{cst}{1-F}) * F^p + \frac{cst}{1-F}
+\end{align*}
 
 Alors la complexité est:
 \begin{equation*}
    c(p) = \mathcal{O}(F^p)
 \end{equation*}
 
-Alors si on prend $F = 20$ - \textit{estimation empirique} -
+Alors si on prend $F = 30$ - \textit{estimation empirique} -
 \begin{equation}
-   c(p) \approx 20^p
+   c(p) \approx 30^p
 \end{equation}
 
+\newpage
 \section{Analyse expérimentale}
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{comp_nodes.pdf}
+  \caption{Comparaison entre negamax et negamax avec l’élagage $\alpha/\beta$ au
+   niveau de nombre des noeuds traités}
+  \label{fig:comp_nodes}
+\end{figure}
+
+En théorie on doit avoir un gain moyenne de l'ordre de racine carrée pour la version
+avec l'élagage alpha-bêta:
+\begin{align*}
+   c(p) &= \mathcal{O}(\sqrt{F^p}) \\
+        &= \mathcal{O}(F^{\frac{p}{2}})
+\end{align*}
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{comp_times.pdf}
+  \caption{Comparaison entre negamax et negamax avec l’élagage $\alpha/\beta$ au
+   niveau de temps d'éxecution}
+  \label{fig:comp_times}
+\end{figure}
+
+Pour maximiser le nombre de coupure avec l'algorithme $\alpha/\beta$. On peut
+utiliser une technique de la programmation dynamique qui s'appelle
+la \textbf{Mémoïsation} ou on garde un tableau de mappage entre les noeuds et le
+résultat de l'appel minimax. et a chaque fois qu'on essaye de calculer le
+minimax d'un plateau, on cherche d'abord dans ce tableau si la noeud est
+déja stocké on récupére directement le résultat. Mais cette technique ne
+marchera pas toujours car elle consomme trop de memoire $\mathcal{O}(2^n)$
+pour les jeux ayant un facteur de branchement grand.
+
+Une autre optimisation c'est de trier les bouges possibles avant commencer, 
+Ce tri dois prioritiser les bouges ayant plus de chance d'avoir un evaluation
+minimax grande, pour cela on peux utiliser l'heuristique existant pour tries
+ces bouges. Ca doit améliorer le performance puisque les bouges qui ont un
+bonne heuristique dés les premier coups devront au moyenne avoir un heuristique
+meilleur en generale, alors le nombre des coupures doit s'augmenter car
+l'interval $[\alpha, \beta]$ sera rognés plus rapidement.
 
 
 \end{document}
