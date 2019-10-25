@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{mathtools}
 
 \title{TP1 IA}
 \author{ABDELMOUMENE Djahid}
@@ -11,16 +12,111 @@
 \maketitle
 
 \section{Fonction d'evaluation}
-\begin{equation}
-   E(noeud, joueur) = \sum_{p \in noeud} joueur * p.valeur
-\end{equation}
+La fonction d'evaluation depend de deux critéres. Le premier c'est la
+difference des sommes des valeurs des pions de joueur et l'adversaire.
+Cette heuristique capture le fait qu'on a plus de chance de gagner si on
+a plus des pions avec des valeur grandes.
 
-\begin{equation}
+On prend $N$ comme la nombre des lignes, $M$ nombre des colonnes et $Pions$
+l'ensemble des pions, où pour chaque pion on peux récupérer la couleur ($1$ ou
+$-1$), la valeur et les indices dans le plateau x et y.
+
+\begin{equation*}
+   valDiff(Pions) = \sum_{p \in Pions} p.col * p.val
+\end{equation*}
+
+Et le deuxiéme c'est la difference des sommes des distances inversés
+(\textit{ie}: $N - dist$) vers la ligne de fond. La valeur de la distance est
+inversé parce qu'on veux que l'evaluation soit grande quand les pions sont proche
+de fond et petite lorsque les pions sont loin. Cette heuristique encourage les
+pions a se rapprocher vers les pions de l'adversaire et vers la ligne de fond ou
+on peux gagner.
+
+\begin{equation*}
+   indiceFond(couleur) =
+   \begin{cases}
+      N-1 & couleur = -1 = \text{o}\\
+      0   & couleur = 1 = \text{x}
+   \end{cases}
+\end{equation*}
+
+\begin{equation*}
+   distDiff(Pions) = \sum_{p \in Pions} p.col * (N - \lvert p.x
+   - indiceFond(p.col) \rvert)
+\end{equation*}
+
+Pour combiner ces deux critéres on choisit un facteur $\lambda$ pour multiplier
+$valDiff$ et on fait la somme, cette valeur doit indiquer le facteur d'importance
+de la $valDiff$ de la $distDiff$. C'est à dire qu'on veux prioriser l'attack
+des pion de l'avancement si $\lambda > 1$.
+
+Alors la fonction d'evaluation:
+
+\begin{equation*}
+   H(Pions, joueur) = joueur * (valDiff(Pions) * \lambda + distDiff(Pions))
+\end{equation*}
+
+\section{Complexité}
+On calcule la fonction de coût $c(p)$ où $p$ est la profondeur maximale et
+$F$ est le facteur de branchement - \textit{ie} moyenne des nombre des bouges
+possible à chaque coup -, et $cst$ un constant décrivant les conditions et
+operations unitaires pour effectuer le minimax.
+
+\begin{equation*}
    c(p) =
    \begin{cases}
-      N * M            &  \quad \text{si} n = 0 \\
-      MOV * c(p-1) + 1 &  \quad \text{si} n \geq 1
+      N * M            &  p = 0 \\
+      F * c(p-1) + cst &  p \geq 1
    \end{cases}
+\end{equation*}
+
+Si on prend $u(p) = c(p) - \frac{cst}{1-F}$ alors:
+\begin{equation*}
+   u(p) =
+   \begin{cases}
+      N*M - \frac{1}{1-F}              & p = 0 \\
+      F * (c(p-1) - \frac{1}{1-F}) + cst & p \geq 1
+   \end{cases}
+\end{equation*}
+
+On simplifie:
+\begin{equation*}
+   u(p) =
+   \begin{cases}
+      N*M - \frac{cst}{1-F}  & p = 0 \\
+      F * c(p-1)
+   \end{cases}
+\end{equation*}
+
+Alors $U_p$ est un suite géometrique ou le terme génerale est:
+\begin{equation*}
+   u(p) = u(0) * F^p
+\end{equation*}
+\begin{equation*}
+   u(p) = (N * M - \frac{cst}{1-F}) * F^p
+\end{equation*}
+
+Alors on peux déduire $c(p)$:
+\begin{equation*}
+   c(p) = u(p) + \frac{cst}{1-F}
+\end{equation*}
+
+\begin{equation*}
+   c(p) = (N * M - \frac{cst}{1-F}) * F^p + \frac{cst}{1-F}
+\end{equation*}
+
+Alors la complexité est:
+\begin{equation*}
+   c(p) = \mathcal{O}(F^p)
+\end{equation*}
+
+Alors si on prend $F = 20$ - \textit{estimation empirique} -
+\begin{equation}
+   c(p) \approx 20^p
 \end{equation}
 
+\section{Analyse expérimentale}
+
+
 \end{document}
+
