@@ -9,7 +9,7 @@
 // changed this to accomodate largest f_eval
 #define INFINI 1000000
 
-#define PROF_MAX 5
+#define PROF_MAX 7
 
 #define ALPHA_BETA 1
 /*#define DEBUG*/
@@ -454,12 +454,12 @@ int f_eval(Pion* jeu, int joueur)
 
          // ignore empty cells
          if(col != 0) {
-            int goal = (col == -1) ? 9 : 0; // goal line that the pawns must seek
+            int goal = (col == -1) ? 10 : -1; // goal line that the pawns must seek
 
             // distance is reversed because it is inversly correlated with evaluation
             // ie: if the distance is big the evaluation should be small and if
             // the distance is small the evaluation should be big
-            int inv_dist = (9 - abs(goal - i));
+            int inv_dist = (10 - abs(goal - i));
             int is_player = (col == joueur) ? 1 : -1;
 
             dist_diff += is_player * inv_dist;
@@ -473,13 +473,13 @@ int f_eval(Pion* jeu, int joueur)
 
    int mult_factor = 75; // this value should represent how much more important the value
    // difference is from the distance difference
-
+/*
    // to randomize played games
    // expected to either add or substract 1 (uniformly) from the evaluation every (rand_step) calls
    int rand_step = 10; 
    int rand_add = ((rand() % 2) ? 1 : -1) * ((rand() % rand_step == 0) ? 1 : 0);
-
-   return val_diff * mult_factor + dist_diff + rand_add;
+*/
+   return val_diff * mult_factor + dist_diff;// + rand_add;
 }
 
 //copie du plateau
@@ -530,7 +530,8 @@ void f_affiche_stats()
    double average_elapsed_time = 1000.0 * stats.total_elapsed_time / stats.num_AI_calls;
    double average_moves_per_turn = (double)stats.num_tested_moves / stats.num_searched_nodes;
    double average_nodes_per_call = (double)stats.num_searched_nodes / stats.num_AI_calls;
-
+   
+   // write to csv file to draw it
    fprintf(output_file, "%s:%d:%g:%g:%g\n", (ALPHA_BETA) ? "true" : "false", PROF_MAX, average_moves_per_turn, average_elapsed_time, average_nodes_per_call);
 
    printf("****** STATISTIQUES ******\n");
@@ -625,8 +626,10 @@ int f_negamax(Pion* plateau_courant, int profondeur, int joueur, int player_coun
 
                      int newval = -f_negamax(plateau_suivant, profondeur - 1, -joueur, player_counter, opponent_counter);
 
-                     // update the maximum value
-                     if(newval > maxval) {
+                     // update the maximum value and randomize which maximum is
+                     // chosen 
+                     int rand_step = 5;
+                     if((rand()%rand_step == 0)?newval >= maxval:newval > maxval) {
                         maxval = newval;
 
                         // set the move
@@ -700,7 +703,7 @@ int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, i
 
                      // if any of the two won
                      if(win_check) {
-                        return -win_check * INFINI;
+                        return win_check * 10000;
                      }
 
                      has_next = 0; // if theres at least one possible move the node is not terminal
@@ -710,8 +713,10 @@ int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, i
 
                      int newval = -f_negamax_ab(plateau_suivant, profondeur - 1, -joueur, -beta, -alpha, player_counter, opponent_counter); // note that the alpha and beta are reversed
 
-                     // update the maximum value
-                     if(newval > maxval) {
+                     // update the maximum value and randomize which maximum is
+                     // chosen 
+                     int rand_step = 5;
+                     if((rand()%rand_step == 0)? newval >= maxval : newval > maxval) {
                         maxval = newval;
 
                         // set the move
@@ -776,7 +781,7 @@ void f_IA(int joueur)
 /* ******************************** WARNING **********************************
  * ******************** THIS IS NOT GOOD NEEDS TO CHANGE *********************
  * What i'm doing here is reverse the board and treat it as if it was the o's
- * turn this is done because i couldn't figure out the problem with the x player
+ * turn. this is done because i couldn't figure out the problem with the x player
  * always losing and sacrificing its pawns this seems to be at least
  * a temporary fix, given i didn't have time to fix the real problem in
  * f_negamax_ab and f_negamax.
