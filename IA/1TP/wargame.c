@@ -227,54 +227,6 @@ void f_affiche_plateau(Pion *plateau)
 #endif
 }
 
-// **** added function **** same as f_gagnant but for any board (not just
-// plateau de jeu)
-int f_gagnant_test(Pion* jeu)
-{
-   int i, j, somme1 = 0, somme2 = 0;
-
-
-#ifdef DEBUG
-   printf("dbg: entering %s %d\n", __FUNCTION__, __LINE__);
-#endif
-
-   //Quelqu'un est-il arrive sur la ligne de l'autre
-   for(i = 0; i < NB_COLONNES; i++) {
-      if(jeu[i].couleur == 1) {
-         return 1;
-      }
-
-      if(jeu[(NB_LIGNES - 1)*NB_COLONNES + i].couleur == -1) {
-         return -1;
-      }
-   }
-
-   //taille des armees
-   for(i = 0; i < NB_LIGNES; i++) {
-      for(j = 0; j < NB_COLONNES; j++) {
-         if(jeu[i * NB_COLONNES + j].couleur == 1) {
-            somme1++;
-         }
-
-         if(jeu[i * NB_COLONNES + j].couleur == -1) {
-            somme2++;
-         }
-      }
-   }
-
-   if(somme1 == 0) {
-      return -1;
-   }
-
-   if(somme2 == 0) {
-      return 1;
-   }
-
-#ifdef DEBUG
-   printf("dbg: exiting %s %d\n", __FUNCTION__, __LINE__);
-#endif
-   return 0;
-}
 int f_gagnant()
 {
    int i, j, somme1 = 0, somme2 = 0;
@@ -284,7 +236,7 @@ int f_gagnant()
    printf("dbg: entering %s %d\n", __FUNCTION__, __LINE__);
 #endif
 
-   //Quelqu'un est-il arrive sur la ligne de l'autre
+//Quelqu'un est-il arrive sur la ligne de l'autre
    for(i = 0; i < NB_COLONNES; i++) {
       if(plateauDeJeu[i].couleur == 1) {
          return 1;
@@ -295,7 +247,7 @@ int f_gagnant()
       }
    }
 
-   //taille des armees
+//taille des armees
    for(i = 0; i < NB_LIGNES; i++) {
       for(j = 0; j < NB_COLONNES; j++) {
          if(plateauDeJeu[i * NB_COLONNES + j].couleur == 1) {
@@ -324,10 +276,10 @@ int f_gagnant()
 
 
 /**
- * Prend comme argument la ligne et la colonne de la case
- * 	pour laquelle la bataille a lieu
- * Renvoie le couleur du gagnant
- * */
+* Prend comme argument la ligne et la colonne de la case
+* 	pour laquelle la bataille a lieu
+* Renvoie le couleur du gagnant
+* */
 int f_bataille(int l, int c)
 {
    int i, j, mini, maxi, minj, maxj;
@@ -366,11 +318,11 @@ int f_bataille(int l, int c)
 
 
 /**
- * Prend la ligne et colonne de la case d'origine
- * 	et la ligne et colonne de la case de destination
- * Renvoie 1 en cas d'erreur
- * Renvoie 0 sinon
- * */
+* Prend la ligne et colonne de la case d'origine
+* 	et la ligne et colonne de la case de destination
+* Renvoie 1 en cas d'erreur
+* Renvoie 0 sinon
+* */
 int f_test_mouvement(Pion *plateau, int l1, int c1, int l2, int c2, int couleur)
 {
 #ifdef DEBUG
@@ -406,16 +358,15 @@ int f_test_mouvement(Pion *plateau, int l1, int c1, int l2, int c2, int couleur)
 
 
 /**
- * Prend la ligne et colonne de la case d'origine
- * 	et la ligne et colonne de la case de destination
- *  et effectue le trantement de l'operation demandée
- * Renvoie 1 en cas d'erreur
- * Renvoie 0 sinon
- * */
+* Prend la ligne et colonne de la case d'origine
+* 	et la ligne et colonne de la case de destination
+*  et effectue le trantement de l'operation demandée
+* Renvoie 1 en cas d'erreur
+* Renvoie 0 sinon
+* */
 int f_bouge_piece(Pion *plateau, int l1, int c1, int l2, int c2, int couleur)
 {
    int gagnant = 0;
-
 
 #ifdef DEBUG
    printf("dbg: entering %s %d\n", __FUNCTION__, __LINE__);
@@ -424,7 +375,6 @@ int f_bouge_piece(Pion *plateau, int l1, int c1, int l2, int c2, int couleur)
    if(f_test_mouvement(plateau, l1, c1, l2, c2, couleur) != 0) {
       return 1;
    }
-
 
    /* Cas ou il n'y a personne a l'arrivee */
    if(plateau[l2 * NB_COLONNES + c2].valeur == 0) {
@@ -452,6 +402,7 @@ int f_bouge_piece(Pion *plateau, int l1, int c1, int l2, int c2, int couleur)
 #ifdef DEBUG
    printf("dbg: exiting %s %d\n", __FUNCTION__, __LINE__);
 #endif
+
    return 0;
 }
 
@@ -493,36 +444,41 @@ int f_valeur(Pion* jeu, int joueur)
 int f_eval(Pion* jeu, int joueur)
 {
    int dist_diff = 0; // sum of players distances from the opposite player's goal line
+   int val_diff = 0;
 
    for (int i = 0; i < NB_LIGNES; i++) {
       for (int j = 0; j < NB_COLONNES; j++) {
          int col = jeu[i * NB_COLONNES + j].couleur;
+         int val = jeu[i * NB_COLONNES + j].valeur;
 
          // ignore empty cells
          if(col != 0) {
             int goal = (col == -1) ? 9 : 0; // goal line that the pawns must seek
 
             // distance is reversed because it is inversly correlated with evaluation
-            // ie: if the distance is big the evaluation should be small etc..
+            // ie: if the distance is big the evaluation should be small and if
+            // the distance is small the evaluation should be big
             int inv_dist = (9 - abs(goal - i));
             int is_player = (col == joueur) ? 1 : -1;
 
             dist_diff += is_player * inv_dist;
+
+            // difference of the sum of the players pawn values and the sum of the
+            // opponents pawn values
+            val_diff += is_player * val;
          }
       }
    }
 
-   int val_diff = f_valeur(jeu, joueur) - f_valeur(jeu, -joueur); // player pawn values difference
-   int mult_factor = 5; // this value should represent how much more important the value
+   int mult_factor = 75; // this value should represent how much more important the value
    // difference is from the distance difference
 
    // to randomize played games
-   // expected to either add or substract 1 (uniformly) from the evaluation every (rand_step/2) calls
-   int rand_step = 50;
-   int rand_val = rand();
-   int rand_add = (rand_val % rand_step == 0) ? 1 : ((rand_val % rand_step == 1) ? -1 : 0);
+   // expected to either add or substract 1 (uniformly) from the evaluation every (rand_step) calls
+   int rand_step = 3;
+   int rand_add = ((rand() % 2) ? 1 : -1) * ((rand() % rand_step == 0) ? 1 : 0);
 
-   return val_diff * mult_factor + dist_diff;// + rand_add;
+   return val_diff * mult_factor + dist_diff + rand_add;
 }
 
 //copie du plateau
@@ -556,52 +512,85 @@ Pion* f_raz_plateau()
 }
 
 // global variable to store the ai move
-struct move {
-   struct {
-      int x, y;
-   } from;
-   struct {
-      int x, y;
-   } to;
-} move;
+int fromX, fromY;
+int toX, toY;
 
 // to store the collected stats
 struct {
-   long total_visited_nodes; // number of all node visits from all calls
-   int num_calls; // number of all ai calls
+   long num_tested_moves; // number of all node visits from all calls
+   int num_AI_calls; // number of all f_IA calls
    double total_elapsed_time; // in seconds (only execution of f_negamax or f_negamax_ab is counted)
+   int num_searched_nodes;
 } stats;
 
 void f_affiche_stats()
 {
+   FILE* output_file = fopen("output.csv", "a");
+   double average_elapsed_time = 1000.0 * stats.total_elapsed_time / stats.num_AI_calls;
+   double average_moves_per_turn = (double)stats.num_tested_moves / stats.num_searched_nodes;
+   double average_nodes_per_call = (double)stats.num_searched_nodes / stats.num_AI_calls;
+
+   fprintf(output_file, "%s:%d:%g:%g:%g\n", (ALPHA_BETA) ? "True" : "False", PROF_MAX, average_moves_per_turn, average_elapsed_time, average_nodes_per_call);
+
    printf("****** STATISTIQUES ******\n");
    printf("WITH ALPHA BETA = %s\n", (ALPHA_BETA) ? "yes" : "no");
    printf("MAX DEPTH = %d\n", PROF_MAX);
-   printf("NUM OF AI CALLS = %d function calls\n", stats.num_calls);
-   printf("AVERAGE NODE VISITS = %g nodes\n", (float)stats.total_visited_nodes / stats.num_calls);
-   printf("AVERAGE ELPASED TIME = %gms\n", 1000 * stats.total_elapsed_time);
+   printf("NUM OF AI CALLS = %d function calls\n", stats.num_AI_calls);
+   printf("AVERAGE MOVES PER TURN= %g nodes\n", average_moves_per_turn) ;
+   printf("AVERAGE NODES PER CALL = %g nodes\n", average_nodes_per_call) ;
+   printf("AVERAGE ELPASED TIME = %.2fms\n", average_elapsed_time);
    printf("**************************\n");
 }
 
-// algo negamax sans alpha beta
-int f_negamax(Pion* plateau_courant, int profondeur, int joueur)
+int f_win_check(int joueur, int* player_counter, int* opponent_counter,
+                int voisinX, int old_dest, int new_dest)
 {
-   // update stats
-   stats.total_visited_nodes++;
 
-   int winner = f_gagnant_test(plateau_courant);
+   int goal = (joueur == 1) ? 0 : 9; // goal line
 
-   if(winner) {
-      return joueur * winner * INFINI;
+   if(voisinX == goal) { // if we moved to the goal line the node is winning and therefore terminal
+      return 1;
    }
 
+   // update pawn counters only if the destination
+   // coordinated had an opponent's pawn
+   if(old_dest == -joueur) {
+      // check the destination coordinate for who won the battle
+      if(new_dest == joueur) { // if the player pawn won
+         (*opponent_counter)--; // the opponent loses a pawn
+      } else {
+         (*player_counter)--; // otherwise we lost one
+      }
+
+      // check if either pawn counters are 0
+      if((*player_counter) <= 0) {
+         return -1; // if we lost our last pawn in a failed attack
+      }
+
+      if((*opponent_counter) <= 0) {
+         return 1; // if we successfully finished all opponent pawns
+      }
+   }
+
+   return 0; // neither won
+}
+
+
+// algo negamax sans alpha beta
+int f_negamax(Pion* plateau_courant, int profondeur, int joueur, int player_counter, int opponent_counter)
+{
    if(profondeur <= 0) {
       return f_eval(plateau_courant, joueur);
    }
 
+   // update stats; adding a node search call to the total
+   stats.num_searched_nodes ++;
+
    int maxval = -INFINI;
 
-   Pion* plateau_suivant = f_raz_plateau();
+   int has_next = 1; // flag to signal a terminal node (no possible moves)
+
+   Pion* plateau_suivant = (Pion *) malloc(NB_LIGNES * NB_COLONNES * sizeof (Pion));
    f_copie_plateau(plateau_courant, plateau_suivant);
 
    for (int i = 0; i < NB_LIGNES; i++) {
@@ -617,18 +606,32 @@ int f_negamax(Pion* plateau_courant, int profondeur, int joueur)
 
                   // try moving the pawn
                   if(f_bouge_piece(plateau_suivant, i, j, voisinX, voisinY, joueur) == 0) {
-                     // TODO  move win check here
+                     // win check
+                     int new_dest = plateau_suivant[i * NB_COLONNES + j].couleur; // new destination pawn
+                     int old_dest = plateau_courant[i * NB_COLONNES + j].couleur; // old destination pawn
 
-                     int newval = -f_negamax(plateau_suivant, profondeur - 1, -joueur);
+                     int win_check = f_win_check(joueur, &player_counter, &opponent_counter, voisinX, old_dest, new_dest);
+
+                     // if any of the two won
+                     if(win_check) {
+                        return win_check * INFINI;
+                     }
+
+                     has_next = 0; // if there is at least one move we unset the flag
+
+                     // update stats; adding a move to the total
+                     stats.num_tested_moves++;
+
+                     int newval = -f_negamax(plateau_suivant, profondeur - 1, -joueur, player_counter, opponent_counter);
 
                      // update the maximum value
-                     if(newval >= maxval) {
+                     if(newval > maxval) {
                         maxval = newval;
 
                         // set the move
                         if(profondeur == PROF_MAX) {
-                           move.from.x = i,     move.from.y = j;
-                           move.to.x = voisinX, move.to.y = voisinY;
+                           fromX = i,     fromY = j;
+                           toX = voisinX, toY = voisinY;
                         }
                      }
 
@@ -636,45 +639,44 @@ int f_negamax(Pion* plateau_courant, int profondeur, int joueur)
                      // put the origin and destination cell pieces back
                      // (in case there was an attack; ie: neighboring
                      // cell had an enemy pawn)
-                     /*
-                     plateau_suivant[i       * NB_COLONNES + j      ] = plateau_courant[i      * NB_COLONNES + j      ];
+
+                     plateau_suivant[i       * NB_COLONNES + j      ] = plateau_courant[i       * NB_COLONNES + j      ];
                      plateau_suivant[voisinX * NB_COLONNES + voisinY] = plateau_courant[voisinX * NB_COLONNES + voisinY];
-                     */
-                     // memcpy(&plateau_suivant[i * NB_COLONNES + j],             &plateau_courant[i * NB_COLONNES + j], sizeof(Pion));
-                     // memcpy(&plateau_suivant[voisinX * NB_COLONNES + voisinY], &plateau_courant[voisinX * NB_COLONNES + voisinY], sizeof(Pion));
-                     f_bouge_piece(plateau_suivant, voisinX, voisinY, i, j, joueur);
+
+                     // f_bouge_piece(plateau_suivant, voisinX, voisinY, i, j, joueur);
                   }
 
                }
             }
-
       }
    }
 
+
    free(plateau_suivant);
+
+   // if the node is terminal return the evaluation of the current node
+   if(!has_next) {
+      return f_eval(plateau_courant, joueur);
+   }
+
    return maxval;
 }
 
 // algo negamax avec alpha beta maximize toujours pour le joueur donné
-int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, int beta)
+int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, int beta, int player_counter, int opponent_counter)
 {
-   // update stats
-   stats.total_visited_nodes++;
-
-   // win check
-   /*int winner = f_gagnant_test(plateau_courant);
-
-   if(winner) {
-      return joueur * winner * INFINI;
-   }*/
-
    if(profondeur <= 0) {
       return f_eval(plateau_courant, joueur);
    }
 
+   // update stats; adding a node search call to the total
+   stats.num_searched_nodes ++;
+
    int maxval = -INFINI;
 
-   Pion* plateau_suivant = f_raz_plateau();
+   int has_next = 1; // in case the node is terminal
+
+   Pion* plateau_suivant = (Pion *) malloc(NB_LIGNES * NB_COLONNES * sizeof (Pion));
    f_copie_plateau(plateau_courant, plateau_suivant);
 
    for (int i = 0; i < NB_LIGNES; i++) {
@@ -689,18 +691,32 @@ int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, i
 
                   // try moving the pawn
                   if(f_bouge_piece(plateau_suivant, i, j, voisinX, voisinY, joueur) == 0) {
-                     // TODO  move win check here
+                     // win check
+                     int new_dest = plateau_suivant[i * NB_COLONNES + j].couleur; // new destination pawn
+                     int old_dest = plateau_courant[i * NB_COLONNES + j].couleur; // old destination pawn
 
-                     int newval = -f_negamax_ab(plateau_suivant, profondeur - 1, -joueur, -beta, -alpha); // note that the alpha and beta are reversed
+                     int win_check = f_win_check(joueur, &player_counter, &opponent_counter, voisinX, old_dest, new_dest);
+
+                     // if any of the two won
+                     if(win_check) {
+                        return win_check * INFINI;
+                     }
+
+                     has_next = 0; // if theres at least one possible move the node is not terminal
+
+                     // update stats
+                     stats.num_tested_moves++;
+
+                     int newval = -f_negamax_ab(plateau_suivant, profondeur - 1, -joueur, -beta, -alpha, player_counter, opponent_counter); // note that the alpha and beta are reversed
 
                      // update the maximum value
-                     if(newval >= maxval) {
+                     if(newval > maxval) {
                         maxval = newval;
 
                         // set the move
                         if(profondeur == PROF_MAX) {
-                           move.from.x = i, move.from.y = j      ;
-                           move.to.x   = voisinX, move.to.y   = voisinY;
+                           fromX = i, fromY = j      ;
+                           toX   = voisinX, toY   = voisinY;
                         }
                      }
 
@@ -711,7 +727,7 @@ int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, i
 
                      // cut off if the [alpha, beta] range is empty
                      if(alpha >= beta) {
-                        goto CLEAN_EXIT;
+                        goto CLEAN_EXIT; // goto to exit all four loops
                      }
 
                      // undo the move:
@@ -719,19 +735,10 @@ int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, i
                      // (in case there was an attack; ie: neighboring
                      // cell had an enemy pawn)
 
-                     // plateau_suivant[i *      NB_COLONNES + j      ] = plateau_courant[i      * NB_COLONNES + j      ];
-                     // plateau_suivant[voisinX * NB_COLONNES + voisinY] = plateau_courant[voisinX * NB_COLONNES + voisinY];
+                     plateau_suivant[i       * NB_COLONNES + j      ] = plateau_courant[i       * NB_COLONNES + j      ];
+                     plateau_suivant[voisinX * NB_COLONNES + voisinY] = plateau_courant[voisinX * NB_COLONNES + voisinY];
 
-                     // plateau_suivant[voisinX * NB_COLONNES + voisinY] = plateau_courant[voisinX * NB_COLONNES + voisinY];
-
-                     f_bouge_piece(plateau_suivant, voisinX, voisinY, i, j, joueur);
-                     // memcpy(&plateau_suivant[i*NB_COLONNES + j],             &plateau_courant[i*NB_COLONNES + j], sizeof(Pion));
-                     // plateau_suivant[voisinX * NB_COLONNES + voisinY].couleur = 0;
-                     // plateau_suivant[voisinX * NB_COLONNES + voisinY].valeur = 0;
-
-                     // memcpy(&plateau_suivant[voisinX*NB_COLONNES + voisinY], &plateau_courant[voisinX*NB_COLONNES + voisinY], sizeof(Pion));
-
-                     // f_copie_plateau(plateau_courant, plateau_suivant);
+                     // f_bouge_piece(plateau_suivant, voisinX, voisinY, i, j, joueur);
                   }
 
                }
@@ -742,9 +749,16 @@ int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, i
       }
    }
 
+
 // to perform clean exits when cutting branches off
 CLEAN_EXIT:
    free(plateau_suivant);
+
+   // if the node is terminal return the evaluation of the current node
+   if(!has_next) {
+      return f_eval(plateau_courant, joueur);
+   }
+
    return maxval;
 }
 
@@ -763,23 +777,26 @@ void f_IA(int joueur)
    clock_t strt, end;
    strt = clock();
 
+   int player_counter = f_nbPions(plateauDeJeu, joueur);
+   int opponent_counter = f_nbPions(plateauDeJeu, -joueur);
+
 #if ALPHA_BETA==1
-   eval = f_negamax_ab(plateauDeJeu, PROF_MAX, joueur, -INFINI, INFINI);
+   eval = f_negamax_ab(plateauDeJeu, PROF_MAX, joueur, -INFINI, INFINI, player_counter, opponent_counter);
 #else
-   eval = f_negamax(plateauDeJeu, PROF_MAX, joueur);
+   eval = f_negamax(plateauDeJeu, PROF_MAX, joueur, player_counter, opponent_counter);
 #endif
 
    end = clock();
 
    //update stats
-   stats.num_calls ++;
+   stats.num_AI_calls ++;
    stats.total_elapsed_time += ((double) end - strt) / CLOCKS_PER_SEC;
 
-   f_bouge_piece(plateauDeJeu, move.from.x, move.from.y, move.to.x, move.to.y, joueur);
+   f_bouge_piece(plateauDeJeu, fromX, fromY, toX, toY, joueur);
 
    printf("\n IA move for %c with eval %d: %d%c%d%c\n", (joueur == 1) ? 'x' : 'o', eval,
-          move.from.x,      f_convert_int2char(move.from.y),
-          move.to.x,        f_convert_int2char(move.to.y));
+          fromX,      f_convert_int2char(fromY),
+          toX,        f_convert_int2char(toY));
 
 
 #ifdef DEBUG

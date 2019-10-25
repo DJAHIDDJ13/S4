@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{amsmath}
 
 \title{TP1 IA}
 \author{ABDELMOUMENE Djahid}
@@ -9,6 +10,17 @@
 \begin{document}
 \maketitle
 
-\section{}
+\section{Fonction d'evaluation}
+\begin{equation}
+   E(noeud, joueur) = \sum_{p \in noeud} joueur * p.valeur
+\end{equation}
+
+\begin{equation}
+   c(p) =
+   \begin{cases}
+      N * M            &  \quad \text{si} n = 0 \\
+      MOV * c(p-1) + 1 &  \quad \text{si} n \geq 1
+   \end{cases}
+\end{equation}
 
 \end{document}
