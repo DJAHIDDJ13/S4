@@ -9,10 +9,11 @@
 // changed this to accomodate largest f_eval
 #define INFINI 1000000
 
-#define PROF_MAX 4
+#define PROF_MAX 5
 
 #define ALPHA_BETA 1
 /*#define DEBUG*/
+
 
 typedef struct pion_s {
    int couleur;
@@ -475,7 +476,7 @@ int f_eval(Pion* jeu, int joueur)
 
    // to randomize played games
    // expected to either add or substract 1 (uniformly) from the evaluation every (rand_step) calls
-   int rand_step = 3;
+   int rand_step = 10; 
    int rand_add = ((rand() % 2) ? 1 : -1) * ((rand() % rand_step == 0) ? 1 : 0);
 
    return val_diff * mult_factor + dist_diff + rand_add;
@@ -530,7 +531,7 @@ void f_affiche_stats()
    double average_moves_per_turn = (double)stats.num_tested_moves / stats.num_searched_nodes;
    double average_nodes_per_call = (double)stats.num_searched_nodes / stats.num_AI_calls;
 
-   fprintf(output_file, "%s:%d:%g:%g:%g\n", (ALPHA_BETA) ? "True" : "False", PROF_MAX, average_moves_per_turn, average_elapsed_time, average_nodes_per_call);
+   fprintf(output_file, "%s:%d:%g:%g:%g\n", (ALPHA_BETA) ? "true" : "false", PROF_MAX, average_moves_per_turn, average_elapsed_time, average_nodes_per_call);
 
    printf("****** STATISTIQUES ******\n");
    printf("WITH ALPHA BETA = %s\n", (ALPHA_BETA) ? "yes" : "no");
@@ -699,7 +700,7 @@ int f_negamax_ab(Pion* plateau_courant, int profondeur, int joueur, int alpha, i
 
                      // if any of the two won
                      if(win_check) {
-                        return win_check * INFINI;
+                        return -win_check * INFINI;
                      }
 
                      has_next = 0; // if theres at least one possible move the node is not terminal
@@ -771,19 +772,44 @@ void f_IA(int joueur)
    printf("dbg: entering %s %d\n", __FUNCTION__, __LINE__);
 #endif
 
-   int eval; // returned value for minimax evaluation
 
+/* ******************************** WARNING **********************************
+ * ******************** THIS IS NOT GOOD NEEDS TO CHANGE *********************
+ * What i'm doing here is reverse the board and treat it as if it was the o's
+ * turn this is done because i couldn't figure out the problem with the x player
+ * always losing and sacrificing its pawns this seems to be at least
+ * a temporary fix, given i didn't have time to fix the real problem in
+ * f_negamax_ab and f_negamax.
+ * ************************************************************************ */ 
+/////////////////////
+   Pion* reversedBoard = f_raz_plateau();
+   if(joueur == -1) {
+      f_copie_plateau(plateauDeJeu, reversedBoard);
+   } else {
+      for(int i = 0; i < NB_LIGNES; i++) {
+         for(int j = 0; j < NB_COLONNES; j++) {
+            reversedBoard[(NB_LIGNES - 1 - i)*NB_COLONNES + j].valeur = plateauDeJeu[i * NB_COLONNES + j].valeur;
+            reversedBoard[(NB_LIGNES - 1 - i)*NB_COLONNES + j].couleur = -plateauDeJeu[i * NB_COLONNES + j].couleur;
+         }
+      }
+   }
+
+   int joueur2 = -1;
+////////////////////
+
+   int eval; // returned value for minimax evaluation
+   
    // benchmarking
    clock_t strt, end;
    strt = clock();
 
-   int player_counter = f_nbPions(plateauDeJeu, joueur);
-   int opponent_counter = f_nbPions(plateauDeJeu, -joueur);
+   int player_counter = f_nbPions(reversedBoard, joueur2);
+   int opponent_counter = f_nbPions(reversedBoard, -joueur2);
 
 #if ALPHA_BETA==1
-   eval = f_negamax_ab(plateauDeJeu, PROF_MAX, joueur, -INFINI, INFINI, player_counter, opponent_counter);
+   eval = f_negamax_ab(reversedBoard, PROF_MAX, joueur2, -INFINI, INFINI, player_counter, opponent_counter);
 #else
-   eval = f_negamax(plateauDeJeu, PROF_MAX, joueur, player_counter, opponent_counter);
+   eval = f_negamax(reversedBoard, PROF_MAX, joueur2, player_counter, opponent_counter);
 #endif
 
    end = clock();
@@ -792,12 +818,22 @@ void f_IA(int joueur)
    stats.num_AI_calls ++;
    stats.total_elapsed_time += ((double) end - strt) / CLOCKS_PER_SEC;
 
-   f_bouge_piece(plateauDeJeu, fromX, fromY, toX, toY, joueur);
+
+   /* Here i reverse back the command depending on the current player to get
+    * the real move decision, as said above this NEEDS to change */
+   ///////////////////////////////////////////////
+   // reverse back
+   if(joueur == 1) {
+      f_bouge_piece(plateauDeJeu, NB_LIGNES-1-fromX, fromY, NB_LIGNES-1-toX, toY, joueur);
+   } else {
+      f_bouge_piece(plateauDeJeu, fromX, fromY, toX, toY, joueur);
+   }
+   free(reversedBoard);
+   ////////////////////////////////////////////
 
    printf("\n IA move for %c with eval %d: %d%c%d%c\n", (joueur == 1) ? 'x' : 'o', eval,
           fromX,      f_convert_int2char(fromY),
           toX,        f_convert_int2char(toY));
-
 
 #ifdef DEBUG
    printf("dbg: exiting %s %d\n", __FUNCTION__, __LINE__);
