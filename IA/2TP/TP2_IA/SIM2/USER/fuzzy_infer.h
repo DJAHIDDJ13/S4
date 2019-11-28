@@ -1,16 +1,17 @@
 #ifndef FUZZY_INFER_H
 #define FUZZY_INFER_H
 
-#define MAX_NAME_LEN 64
+typedef struct input_linguistic_variable IN_LING_VAR;
+typedef struct output_linguistic_variable OUT_LING_VAR;
 
-typedef union fuzzy_set FUZZY_SET;
-
+typedef struct fuzzy_set FUZZY_SET;
+/*
 typedef struct trapezoidal_fuzzy_set TRAP_FUZZY_SET;
 typedef struct triangular_fuzzy_set TRI_FUZZY_SET;
 typedef struct rectangular_fuzzy_set RECT_FUZZY_SET;
 typedef struct polygonal_fuzzy_set POLY_FUZZY_SET;
+*/
 typedef struct fuzzy_set_list FUZZY_SET_LIST;
-
 typedef struct fuzzy_rule FUZZY_RULE;
 
 /*********************************************
@@ -18,12 +19,20 @@ typedef struct fuzzy_rule FUZZY_RULE;
  *********************************************/
 
 typedef struct fuzzy_logic_system {
-   IN_LING_VAR x, y;
-   OUT_LING_VAR z;
-   FUZZY_SET a, b, c;
-   
+   IN_LING_VAR *x, *y;
+   OUT_LING_VAR *z;
+
+   FUZZY_SET_LIST* out;
+
    FUZZY_RULE* rules;
 } FUZZY_SYS;
+
+FUZZY_SYS initSystem(IN_LING_VAR*, IN_LING_VAR*, OUT_LING_VAR*, FUZZY_RULE*);
+void freeSystem(FUZZY_SYS* sys);
+void fuzzify(FUZZY_SYS *sys, const char* var_name, float crisp);
+void inference(FUZZY_SYS *sys);
+float defuzzify(FUZZY_SYS* sys, int sample_size);
+float run(FUZZY_SYS *sys, float crisp1, float crisp2);
 
 /*********************************************
  *             Linguistic variable           *
@@ -32,35 +41,50 @@ typedef struct fuzzy_logic_system {
 /*
  * min_x and max_x define the range of the linguistic variables
  */
-typedef struct input_linguistic_variable {
-   char var_name[MAX_NAME_LEN]; // variable name
-   int min_x;                   // start of the x range
-   int max_x;                   // end of the x range
+struct input_linguistic_variable {
+   char *var_name; // variable name
+   float min_x;                   // start of the x range
+   float max_x;                   // end of the x range
 
-   int input;
-
-   FUZZY_SET_LIST* fuzzy_sets;  // list of fuzzy sets
-} IN_LING_VAR;
-
-
-typedef struct output_linguistic_variable {
-   char var_name[MAX_NAME_LEN]; // variable name
-   int min_x;                   // start of the x range
-   int max_x;                   // end of the x range
+   float input;
 
    FUZZY_SET_LIST* fuzzy_sets;  // list of fuzzy sets
-} OUT_LING_VAR;
+};
 
-IN_LING_VAR createInputVar(const char* var_name, int min_x, int max_x, int input);
-void addFuzzySet(IN_LING_VAR* ling, FUZZY_SET set);
-void freeInputVar(IN_LING_VAR* ling);
+
+struct output_linguistic_variable {
+   char *var_name; // variable name
+   float min_x;                   // start of the x range
+   float max_x;                   // end of the x range
+
+   FUZZY_SET_LIST* fuzzy_sets;  // list of fuzzy sets
+};
+
+IN_LING_VAR *createInputVar(const char* var_name, float min_x, float max_x, float input);
+OUT_LING_VAR *createOutputVar(const char* var_name, float min_x, float max_x);
+
+void addFuzzySet_IN(IN_LING_VAR* ling, FUZZY_SET *set);
+void addFuzzySet_OUT(OUT_LING_VAR* ling, FUZZY_SET *set);
+#define addFuzzySet(_1, _2) _Generic((_1),                         \
+                                    IN_LING_VAR*: addFuzzySet_IN,  \
+                                    OUT_LING_VAR*: addFuzzySet_OUT \
+                                    )(_1, _2)
+
+void freeVar_IN(IN_LING_VAR* ling);
+void freeVar_OUT(OUT_LING_VAR* ling);
+#define freeVar(_1)         _Generic((_1),                        \
+                                    IN_LING_VAR*: freeVar_IN,     \
+                                    OUT_LING_VAR*: freeVar_OUT    \
+                                    )(_1)
+
+
 float getInputMembership(IN_LING_VAR in, const char* set_name);
 
 /*********************************************
  *                 Fuzzy sets                *
  *********************************************/
 
-typedef enum fuzzy_set_type {TRAPEZOID, TRIANGLE, RECTANGLE, POLYGON} FUZZY_SET_TYPE;
+// typedef enum fuzzy_set_type {TRAPEZOID, TRIANGLE, RECTANGLE, POLYGON} FUZZY_SET_TYPE;
 
 /*
  * Trapezoid fuzzy set
@@ -70,17 +94,17 @@ typedef enum fuzzy_set_type {TRAPEZOID, TRIANGLE, RECTANGLE, POLYGON} FUZZY_SET_
  * 0 |___/___________\____
  *      x1 x2     x3  x4
  */
-struct trapezoidal_fuzzy_set {
-   FUZZY_SET_TYPE type;
+struct fuzzy_set {
+   // FUZZY_SET_TYPE type;
 
-   char set_name[MAX_NAME_LEN]; // the set's linguistic name eg: 'hot', 'far' etc..
+   char *set_name; // the set's linguistic name eg: 'hot', 'far' etc..
 
-   int x1;
-   int x2;
-   int x3;
-   int x4;
+   float x1;
+   float x2;
+   float x3;
+   float x4;
 
-   int height; // h
+   float height; // h
 };
 
 /* 
@@ -91,18 +115,18 @@ struct trapezoidal_fuzzy_set {
  * 0 |___/____\____
  *      x1 x2 x3
  */
-struct triangular_fuzzy_set {
+/*struct triangular_fuzzy_set {
    FUZZY_SET_TYPE type;
 
-   char set_name[MAX_NAME_LEN]; // the set's linguistic name eg: 'hot', 'far' etc..
+   char *set_name; // the set's linguistic name eg: 'hot', 'far' etc..
 
-   int x1;
-   int x2;
-   int x3;
+   float x1;
+   float x2;
+   float x3;
    
-   int height;
+   float height;
 };
-
+*/
 /*
  * Rectangular fuzzy set
  * h |   ______   
@@ -111,27 +135,27 @@ struct triangular_fuzzy_set {
  * 0 |__|______|__
  *     x1      x2 
  */
-struct rectangular_fuzzy_set {
+/*struct rectangular_fuzzy_set {
    FUZZY_SET_TYPE type;
 
-   char set_name[MAX_NAME_LEN]; // the set's linguistic name eg: 'hot', 'far' etc..
+   char *set_name; // the set's linguistic name eg: 'hot', 'far' etc..
 
-   int x1;
-   int x2;
+   float x1;
+   float x2;
    
-   int height;
+   float height;
 };
 
-
+*/
 /*
- * List of polygon points
+ * List of polygon pofloats
  */
-typedef struct polygon_list {
-   int x, y;
+/*typedef struct polygon_list {
+   float x, y;
 
    struct poly_list* next;
 } POLY_LIST;
-
+*/
 /*
  * Polygonal fuzzy set
  *
@@ -140,12 +164,12 @@ typedef struct polygon_list {
  *y1 |   /    \__/   \    ...
  * 0 |__/_____________\_
  *     x1 x2 x3 x4 x5  x6 ... 
- * points = [x1, y2]->[x2,y2]-> ...
+ * pofloats = [x1, y2]->[x2,y2]-> ...
  */
-struct polygonal_fuzzy_set {
+/*struct polygonal_fuzzy_set {
    FUZZY_SET_TYPE type;
 
-   char set_name[MAX_NAME_LEN]; // the set's linguistic name eg: 'hot', 'far' etc..
+   char *set_name; // the set's linguistic name eg: 'hot', 'far' etc..
 
    POLY_LIST points;
 };
@@ -156,19 +180,20 @@ union fuzzy_set {
    RECT_FUZZY_SET rectangle;
    POLY_FUZZY_SET polygon;
 };
-
+*/
 /*
  * Linked list of fuzzy sets
  */
 struct fuzzy_set_list {
-   FUZZY_SET current;
+   FUZZY_SET *current;
    FUZZY_SET_LIST* next;
 };
 
-FUZZY_SET_LIST* pushFuzzySet(FUZZY_SET_LIST* list, FUZZY_SET set);
-FUZZY_SET createTrapezoidSet(const char* name, int x1, int x2, int x3, int x4, int height);
-FUZZY_SET createTriangleSet(const char* name, int x1, int x2, int x3, int height);
-FUZZY_SET createRectangleSet(const char* name, int x1, int x2, int height);
+FUZZY_SET_LIST* pushFuzzySetList(FUZZY_SET_LIST* list, FUZZY_SET *set);
+void freeFuzzySetList(FUZZY_SET_LIST* list);
+FUZZY_SET *createTrapezoidSet(const char* name, float x1, float x2, float x3, float x4, float height);
+FUZZY_SET *createTriangleSet(const char* name, float x1, float x2, float x3, float height);
+FUZZY_SET *createRectangleSet(const char* name, float x1, float x2, float height);
 
 /**********************************************
  *                 Fuzzy rules                *
@@ -181,18 +206,24 @@ FUZZY_SET createRectangleSet(const char* name, int x1, int x2, int height);
  * A, B, C are fuzzy_sets
  */
 typedef struct fuzzy_rule {
-   IN_LING_VAR  x, y; // linguistic variables of input and output
-   OUT_LING_VAR z;
-   FUZZY_SET A, B, C; // fuzzy sets of rule definition
+   FUZZY_SET *A, *B, *C; // fuzzy sets of rule definition
 
-   FUZZY_RULE* next; // next fuzzy rule
+   FUZZY_RULE* next;  // next fuzzy rule
 } FUZZY_RULE;
 
 
+FUZZY_RULE* pushFuzzyRule(FUZZY_RULE* rules, FUZZY_SET* A, FUZZY_SET* B, FUZZY_SET* C);
+FUZZY_RULE* popFuzzyRule(FUZZY_RULE* rules);
+void freeFuzzyRules(FUZZY_RULE* rulse);
 
 /* Utility functions */
-float getLinearIntersection(int x1, int y1, int x2, int y2, int x);
-float getTrapezoidArea(int a, int b, int c, int d, int height);
-float getTrapezoidMembership(TRAP_FUZZY_SET set, int in);
-float getSetMembership(FUZZY_SET set, int input);
+float getLinearIntersection(float x1, float y1, float x2, float y2, float x);
+float getTrapezoidArea(float b1, float b2, float height);
+float getTrapezoidMembership(FUZZY_SET set, float in);
+float getSetMembership(FUZZY_SET set, float input);
+float getLinearIntersectionX(float x1, float y1, float x2, float y2, float y);
+void dumpTrapSet(FUZZY_SET s);
+// TRAP_FUZZY_SET transformToTrapezoid(FUZZY_SET set);
+void clipTrapezoid(FUZZY_SET set, float new_h, float* new_x2, float* new_x3);
 #endif
+
