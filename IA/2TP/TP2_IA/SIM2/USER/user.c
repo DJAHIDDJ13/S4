@@ -58,7 +58,7 @@ void UserInit(struct Robot *robot)
    OUT_LING_VAR *l_motor = createOutputVar("left_motor" , -5, 5);
    OUT_LING_VAR *r_motor = createOutputVar("right_motor", -5, 5);
 
-   FUZZY_SET *reverse= createTrapezoidSet("reverse", -4, -3 , -2 , -1, 1);
+   FUZZY_SET *reverse= createTrapezoidSet("reverse", -5, -5 , -4 , -3, 1);
    FUZZY_SET *low    = createTriangleSet ("low"    , 0 , 0.2, 0.5    , 1);
    FUZZY_SET *high   = createTrapezoidSet("high"   , 3 , 4  , 5  , 5 , 1);
 
@@ -89,14 +89,14 @@ void UserInit(struct Robot *robot)
    rules1 = pushFuzzyRule(rules1, far  , close, high);
    rules1 = pushFuzzyRule(rules1, far  , far  , high);
    rules1 = pushFuzzyRule(rules1, close, half , reverse);
-   rules1 = pushFuzzyRule(rules1, half , close, low);
-   rules1 = pushFuzzyRule(rules1, close, close, low );
+   rules1 = pushFuzzyRule(rules1, half , close, high);
+   rules1 = pushFuzzyRule(rules1, close, close, high );
 
    FUZZY_RULE* rules2 = NULL; // rules for the right motor
    rules2 = pushFuzzyRule(rules2, close, far  , high   );
    rules2 = pushFuzzyRule(rules2, far  , close, low    );
    rules2 = pushFuzzyRule(rules2, far  , far  , high   );
-   rules2 = pushFuzzyRule(rules2, close, half , low);
+   rules2 = pushFuzzyRule(rules2, close, half , high);
    rules2 = pushFuzzyRule(rules2, half, close, reverse);
    rules2 = pushFuzzyRule(rules2, close, close, reverse);
    
