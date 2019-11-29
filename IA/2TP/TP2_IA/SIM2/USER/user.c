@@ -45,12 +45,15 @@ void UserInit(struct Robot *robot)
    IN_LING_VAR *l_sensor = createInputVar("left_sensor" , 0, 1023, 0);
    
    FUZZY_SET *close = createTrapezoidSet("close", 200, 300, 1023, 1023, 1);
+   FUZZY_SET *half  = createTriangleSet ("half" , 150, 250,        300, 1);
    FUZZY_SET *far   = createTrapezoidSet("far"  , 0  , 0  , 100 , 250 , 1);
 
    addFuzzySet(r_sensor, close);
    addFuzzySet(r_sensor, far);
+   addFuzzySet(r_sensor, half);
    addFuzzySet(l_sensor, close);
    addFuzzySet(l_sensor, far);
+   addFuzzySet(l_sensor, half);
 
    OUT_LING_VAR *l_motor = createOutputVar("left_motor" , -5, 5);
    OUT_LING_VAR *r_motor = createOutputVar("right_motor", -5, 5);
@@ -85,12 +88,16 @@ void UserInit(struct Robot *robot)
    rules1 = pushFuzzyRule(rules1, close, far  , low );
    rules1 = pushFuzzyRule(rules1, far  , close, high);
    rules1 = pushFuzzyRule(rules1, far  , far  , high);
+   rules1 = pushFuzzyRule(rules1, close, half , reverse);
+   rules1 = pushFuzzyRule(rules1, half , close, low);
    rules1 = pushFuzzyRule(rules1, close, close, low );
 
    FUZZY_RULE* rules2 = NULL; // rules for the right motor
    rules2 = pushFuzzyRule(rules2, close, far  , high   );
    rules2 = pushFuzzyRule(rules2, far  , close, low    );
    rules2 = pushFuzzyRule(rules2, far  , far  , high   );
+   rules2 = pushFuzzyRule(rules2, close, half , low);
+   rules2 = pushFuzzyRule(rules2, half, close, reverse);
    rules2 = pushFuzzyRule(rules2, close, close, reverse);
    
    sys1 = initSystem(l_sensor, r_sensor, l_motor, rules1); 
