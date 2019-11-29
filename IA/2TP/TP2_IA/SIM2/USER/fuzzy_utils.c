@@ -28,7 +28,8 @@ float getLinearIntersection(float x1, float y1, float x2, float y2, float x)
 
    return a * x + b;
 }
-
+/* Does the same thing but for the x value instead
+ */
 float getLinearIntersectionX(float x1, float y1, float x2, float y2, float y)
 {
    if (x1 - x2 == 0) {
@@ -51,7 +52,7 @@ float getTrapezoidArea(float b1, float b2, float height)
 }
 
 /*
- * Returns either 0 if ling does not belong to set
+ * returns the y value of the membership trapezoid function at a specific x
  */
 float getTrapezoidMembership(FUZZY_SET set, float in)
 {
@@ -77,63 +78,14 @@ float getTrapezoidMembership(FUZZY_SET set, float in)
 
    return -1;
 }
-/*
-TRAP_FUZZY_SET transformToTrapezoid(FUZZY_SET set)
-{
-   TRAP_FUZZY_SET temp = {0};
-   temp.set_name = set.trapezoid.set_name;
-   temp.type = TRAPEZOID;
-   temp.height = set.trapezoid.height;
 
-   switch (set.trapezoid.type) {
-   case TRAPEZOID:
-      memcpy(&temp, &set, sizeof(temp));
-      break;
-
-   case TRIANGLE:
-      temp.x1 = set.triangle.x1;
-      temp.x2 = set.triangle.x2;
-      temp.x3 = set.triangle.x2;
-      temp.x4 = set.triangle.x3;
-      break;
-
-   case RECTANGLE:
-      temp.x1 = set.rectangle.x1;
-      temp.x2 = set.rectangle.x1;
-      temp.x3 = set.rectangle.x2;
-      temp.x4 = set.rectangle.x2;
-      break;
-
-   case POLYGON:
-      return temp;
-   }
-
-   return temp;
-}
-*/
+// TODO delete this
 float getSetMembership(FUZZY_SET set, float input)
 {
    return getTrapezoidMembership(set, input);
 }
 
-/*
- * Finds the center of mass of a right triangle
- * a, b, c are the x coordinates of the triangle points
- */
-float getTriangleCentroid(float a, float b, float c)
-{
-   return (a + b + c) / 3;
-}
-
-/*
- * Finds the center of mass of a rectangle
- * a, b are the x coordinates of the base
- */
-float getRectangleCentroid(float a, float b)
-{
-   return (a + b) / 2;
-}
-
+// clips the values of x2 and x3 to fit the new height new_h
 void clipTrapezoid(FUZZY_SET set, float new_h, float* new_x2, float* new_x3)
 {
    if(set.x1 != set.x2) {

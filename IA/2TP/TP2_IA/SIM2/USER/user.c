@@ -39,20 +39,20 @@ void DrawStep()
 
 void UserInit(struct Robot *robot)
 {
-   printf("INITIALIZING FUZZY SYSTEMS\n");
+   /**
+    * Initialisation des systémes floues
+    */
 
+   // variables linguistique pour le capteur droite et gauche
    IN_LING_VAR *r_sensor = createInputVar("right_sensor", 0, 1023, 0);
    IN_LING_VAR *l_sensor = createInputVar("left_sensor" , 0, 1023, 0);
-  /* 
-   FUZZY_SET *close = createTrapezoidSet("close", 200, 300, 1023, 1023, 1);
-   FUZZY_SET *half  = createTriangleSet ("half" , 150, 250,        300, 1);
-   FUZZY_SET *far   = createTrapezoidSet("far"  , 0  , 0  , 100 , 250 , 1);
-   */
-
+   
+   // les fonction d'appartenance pour les valeurs capteurs
    FUZZY_SET *close = createTrapezoidSet("close", 300, 350, 1023, 1023, 1);
    FUZZY_SET *half  = createTriangleSet ("half" , 150, 250,        350, 1);
    FUZZY_SET *far   = createTrapezoidSet("far"  , 0  , 0  , 100 , 250 , 1);
    
+   // ajout des fonction aux variables linguistiques des capteurs
    addFuzzySet(r_sensor, close);
    addFuzzySet(r_sensor, far);
    addFuzzySet(r_sensor, half);
@@ -60,13 +60,16 @@ void UserInit(struct Robot *robot)
    addFuzzySet(l_sensor, far);
    addFuzzySet(l_sensor, half);
 
+   // variables linguistiques pour le moteur droite et gauche
    OUT_LING_VAR *l_motor = createOutputVar("left_motor" , -5, 5);
    OUT_LING_VAR *r_motor = createOutputVar("right_motor", -5, 5);
 
+   // les fonctions d'appartenence pour les vitesses de moteurs
    FUZZY_SET *reverse= createTrapezoidSet("reverse"    , -5, -5 , -4 , -3, 1);
    FUZZY_SET *stop   = createTriangleSet ("stop"      , -0.2 , 0, 0.2    , 1);
    FUZZY_SET *high   = createTrapezoidSet("high"       , 3 , 4  , 5  , 5 , 1);
 
+   // ajout des fonction aux variables linguistiques des moteurs
    addFuzzySet(l_motor, high   );
    addFuzzySet(l_motor, stop    );
    addFuzzySet(l_motor, reverse);
@@ -74,28 +77,35 @@ void UserInit(struct Robot *robot)
    addFuzzySet(r_motor, stop    );
    addFuzzySet(r_motor, reverse);
 
-   FUZZY_RULE* rules1 = NULL; // rules for the left motor
-   rules1 = pushFuzzyRule(rules1, close, far  , stop );
-   rules1 = pushFuzzyRule(rules1, far  , close, high);
-   rules1 = pushFuzzyRule(rules1, far  , far  , high);
+   // régles pour le systéme de moteur gauche
+   FUZZY_RULE* rules1 = NULL;
+   rules1 = pushFuzzyRule(rules1, close, far  , stop   );
+   rules1 = pushFuzzyRule(rules1, far  , close, high   );
+   rules1 = pushFuzzyRule(rules1, far  , far  , high   );
    rules1 = pushFuzzyRule(rules1, close, half , reverse);
-   rules1 = pushFuzzyRule(rules1, half , close, high);
-   // rules1 = pushFuzzyRule(rules1, close, close, reverse);
+   rules1 = pushFuzzyRule(rules1, half , close, high   );
 
-   FUZZY_RULE* rules2 = NULL; // rules for the right motor
+   // régles pour le systéme de moteur droite
+   FUZZY_RULE* rules2 = NULL;
    rules2 = pushFuzzyRule(rules2, close, far  , high   );
    rules2 = pushFuzzyRule(rules2, far  , close, stop   );
    rules2 = pushFuzzyRule(rules2, far  , far  , high   );
    rules2 = pushFuzzyRule(rules2, close, half , high   );
-   rules2 = pushFuzzyRule(rules2, half, close, reverse );
-   // rules2 = pushFuzzyRule(rules2, close, close, reverse);
+   rules2 = pushFuzzyRule(rules2, half , close, reverse);
    
-   sys1 = initSystem(l_sensor, r_sensor, l_motor, rules1); 
+   // ajout des regles et variables linguistiques dans les systémes d'inference
+
+   // systéme 1 utilise les 'rules1' avec les meme valeurs de capteurs pour
+   // trouver la sortie pour le moteur gauche
+   sys1 = initSystem(l_sensor, r_sensor, l_motor, rules1);
+
+   // systéme 2 fait le meme chose mais avec 'rules2' et pour le moteur droite
    sys2 = initSystem(l_sensor, r_sensor, r_motor, rules2);
 }
 
 void UserClose(struct Robot *robot)
 {
+   // liberation des systémes d'inference
    freeSystem(&sys1);
    freeSystem(&sys2);
 }
@@ -128,18 +138,24 @@ boolean StepRobot(struct Robot *robot)
    pas++;
    DrawStep();
    
-  
-   float l_s = (robot->IRSensor[3].DistanceValue + robot->IRSensor[4].DistanceValue + robot->IRSensor[5].DistanceValue) / 3;
-   float r_s = (robot->IRSensor[0].DistanceValue + robot->IRSensor[1].DistanceValue + robot->IRSensor[2].DistanceValue) / 3;
-   //Besoin de rajouter les règles de logique floues ici
-
+   // on prend le moyenne des 3 capteurs gauche pour la valeur d'entree 'crisp' gauche
+   float l_s = (robot->IRSensor[3].DistanceValue +
+                robot->IRSensor[4].DistanceValue +
+                robot->IRSensor[5].DistanceValue) / 3;
+   
+   // meme chose pour les 3 capteurs droite
+   float r_s = (robot->IRSensor[0].DistanceValue +
+                robot->IRSensor[1].DistanceValue +
+                robot->IRSensor[2].DistanceValue) / 3;
+   
+   // les resultats d'inference pour les deux moteurs
    float crisp1 = run(&sys1, l_s, r_s);
    float crisp2 = run(&sys2, l_s, r_s);
-  
+
+   // on utilise les resultats d'inference apres l'arrondissment  
    robot->Motor[LEFT].Value  = round(crisp1);
    robot->Motor[RIGHT].Value = round(crisp2);
    
-   printf("[%g %g] %g %g\n",l_s, r_s, crisp1, crisp2);
    return(TRUE);
 }
 
