@@ -29,7 +29,7 @@ VPATH=OBJ/:SRC/:USER/
 CFLAGS = -I/usr/include \
          -O3
 
-LIBS   = -L/usr/lib -lX11 -lm
+LIBS   = -g -L/usr/lib -lX11 -lm
 
 cc = gcc $(CFLAGS) -c
 

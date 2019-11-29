@@ -191,6 +191,11 @@ FUZZY_SET_LIST* pushFuzzySetList(FUZZY_SET_LIST* list, FUZZY_SET *set)
 FUZZY_SET_LIST* popFuzzySetList(FUZZY_SET_LIST* list)
 {
    FUZZY_SET_LIST* to_ret = list->next;
+   if(list->current) {
+      free(list->current->set_name);
+      free(list->current);
+   }
+   list->current = NULL;
    free(list);
 
    return to_ret;
@@ -284,7 +289,6 @@ void freeVar_OUT(OUT_LING_VAR* ling)
       free(ling->var_name);
       ling->var_name = NULL;
    }
-
    FUZZY_SET_LIST* list = ling->fuzzy_sets;
    ling->fuzzy_sets = NULL;
    

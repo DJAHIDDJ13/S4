@@ -69,21 +69,6 @@ void UserInit(struct Robot *robot)
    addFuzzySet(r_motor, low    );
    addFuzzySet(r_motor, reverse);
 
-/*
-   FUZZY_SET l_motor_rules[][3]  = {
-      {close, far  , low},
-      {far, close ,high},
-      {far, far, high},
-      {close, close, low}
-   };
-   
-   FUZZY_SET r_motor_rules[][3]  = {
-      {close, far  , high},
-      {far, close ,low},
-      {far, far, high},
-      {close, close, reverse}
-   };
-  */ 
    FUZZY_RULE* rules1 = NULL; // rules for the left motor
    rules1 = pushFuzzyRule(rules1, close, far  , low );
    rules1 = pushFuzzyRule(rules1, far  , close, high);
@@ -139,8 +124,8 @@ boolean StepRobot(struct Robot *robot)
    DrawStep();
    
   
-   float l_s = (robot->IRSensor[3].DistanceValue + robot->IRSensor[4].DistanceValue + robot->IRSensor[5].DistanceValue) / 3;
-   float r_s = (robot->IRSensor[0].DistanceValue + robot->IRSensor[1].DistanceValue + robot->IRSensor[2].DistanceValue) / 3;
+   float l_s = (robot->IRSensor[3].DistanceValue + robot->IRSensor[4].DistanceValue + robot->IRSensor[5].DistanceValue);
+   float r_s = (robot->IRSensor[0].DistanceValue + robot->IRSensor[1].DistanceValue + robot->IRSensor[2].DistanceValue);
    //Besoin de rajouter les règles de logique floues ici
 
    float crisp1 = run(&sys1, l_s, r_s);
