@@ -61,13 +61,13 @@ void UserInit(struct Robot *robot)
    addFuzzySet(l_sensor, half);
 
    // variables linguistiques pour le moteur droite et gauche
-   OUT_LING_VAR *l_motor = createOutputVar("left_motor" , -5, 5);
-   OUT_LING_VAR *r_motor = createOutputVar("right_motor", -5, 5);
+   OUT_LING_VAR *l_motor = createOutputVar("left_motor" , -7, 7);
+   OUT_LING_VAR *r_motor = createOutputVar("right_motor", -7, 7);
 
    // les fonctions d'appartenence pour les vitesses de moteurs
-   FUZZY_SET *reverse= createTrapezoidSet("reverse"    , -5, -5 , -4 , -3, 1);
+   FUZZY_SET *reverse= createTrapezoidSet("reverse"    , -6, -5 , -4 , -3, 1);
    FUZZY_SET *stop   = createTriangleSet ("stop"      , -0.2 , 0, 0.2    , 1);
-   FUZZY_SET *high   = createTrapezoidSet("high"       , 3 , 4  , 5  , 5 , 1);
+   FUZZY_SET *high   = createTrapezoidSet("high"       , 3 , 4  , 5  , 6 , 1);
 
    // ajout des fonction aux variables linguistiques des moteurs
    addFuzzySet(l_motor, high   );
