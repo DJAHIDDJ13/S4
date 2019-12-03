@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2019.11.1)  29 NOV 2019 13:12
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2019.11.1)  29 NOV 2019 22:30
+>>>>>>> fuzzy_final
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -91,6 +95,7 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box29
 \@float@everytoks=\toks19
 \@floatcapt=\box30
+<<<<<<< HEAD
 ) (./doc.aux)
 \openout1 = `doc.aux'.
 
@@ -106,6 +111,29 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
 LaTeX Font Info:    ... okay on input line 13.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
 LaTeX Font Info:    ... okay on input line 13.
+=======
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2019/09/10 1.8c listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
+) (./doc.aux)
+\openout1 = `doc.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+>>>>>>> fuzzy_final
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -173,6 +201,7 @@ e
 ))
 \c@lstlisting=\count103
 LaTeX Font Info:    External font `cmex10' loaded for size
+<<<<<<< HEAD
 (Font)              <12> on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 14.
@@ -200,4 +229,98 @@ PDF statistics:
  13 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
+=======
+(Font)              <12> on input line 36.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 36.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 36.
+
+Overfull \hbox (15.4541pt too wide) in paragraph at lines 40--46
+\OT1/cmr/m/n/10 et des r^^Regles. tout cela peut ^etre plac^^Se dans une autre 
+struc-ture ap-pel^^See \OT1/cmr/m/it/10 FUZZY[]SYS
+ []
+
+
+Overfull \hbox (5.44502pt too wide) in paragraph at lines 61--64
+[]\OT1/cmr/m/n/10 Chaque fonc-tion d'appartenance ou en-sem-ble flou est d^^Sef
+ini comme un trap^^Reze,
+ []
+
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (6.41722pt too wide) in paragraph at lines 108--112
+[]\OT1/cmr/m/n/10 pour le pro-ces-sus d'inf^^Serence, il y a trois ^^Setapes, l
+a fuzzi-fi-ca-tion, puis l'inf^^Serence
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--112
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 113--124
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--136
+
+ []
+
+[2]
+<defuzz.pdf, id=16, 222.8325pt x 150.5625pt>
+File: defuzz.pdf Graphic file (type pdf)
+<use defuzz.pdf>
+Package pdftex.def Info: defuzz.pdf  used on input line 142.
+(pdftex.def)             Requested size: 172.5pt x 116.55376pt.
+<sensor.pdf, id=17, 462.52798pt x 346.89601pt>
+File: sensor.pdf Graphic file (type pdf)
+<use sensor.pdf>
+Package pdftex.def Info: sensor.pdf  used on input line 157.
+(pdftex.def)             Requested size: 172.5pt x 129.37639pt.
+<motor.pdf, id=18, 462.52798pt x 346.89601pt>
+File: motor.pdf Graphic file (type pdf)
+<use motor.pdf>
+Package pdftex.def Info: motor.pdf  used on input line 164.
+(pdftex.def)             Requested size: 172.5pt x 129.37639pt.
+ [3 <./defuzz.pdf
+
+pdfTeX warning: pdflatex (file ./defuzz.pdf): PDF inclusion: invalid other reso
+urce which is no dict (key 'ProcSets', type <array>); ignored.
+> <./sensor.pdf>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 171.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 171.
+
+[4 <./motor.pdf>] (./doc.aux) ) 
+Here is how much of TeX's memory you used:
+ 3347 strings out of 494451
+ 45898 string characters out of 6174526
+ 307442 words of memory out of 5000000
+ 7006 multiletter control sequences out of 15000+600000
+ 8092 words of font info for 29 fonts, out of 8000000 for 9000
+ 59 hyphenation exceptions out of 8191
+ 41i,7n,49p,270b,1164s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on doc.pdf (4 pages, 117158 bytes).
+PDF statistics:
+ 105 PDF objects out of 1000 (max. 8388607)
+ 49 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+>>>>>>> fuzzy_final
 
