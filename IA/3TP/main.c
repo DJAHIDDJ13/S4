@@ -138,7 +138,7 @@ void destroyNetwork(NETWORK** network_ptr)
    *network_ptr = NULL;
 }
 
-void evaluate(NETWORK* network, float* data)
+void evaluateNetwork(NETWORK* network, float* data)
 {
    // input layer
    for(int j = 0; j < network->sizes[0]; j++) {
@@ -166,31 +166,20 @@ void evaluate(NETWORK* network, float* data)
    }
 }
 
-void train(NETWORK *network, TRAINING_DATA *data)
+/** Only works for two layers
+ * */
+void trainNetwork(NETWORK *network, TRAINING_DATA *data)
 {
    int num_iter = 10000;
 
-   int max_layer_size = 0;
-   for(int i = 0; i < network->num_layers; i++) {
-      if(max_layer_size < network->sizes[i])
-         max_layer_size = network->sizes[i];
-   }
-
-   float *cur_desired  = malloc(sizeof(float) * max_layer_size);
-   float *next_desired = malloc(sizeof(float) * max_layer_size);
-   
    for(int i = 0; i < num_iter; i++) {
       int choice = rand() % data->size;
-      evaluate(network, data->entries[choice].input);
-
-      // initialize to the desired output
-      memcpy(cur_desired, data->entries[choice].output, sizeof(float) * data->num_out);
+      evaluateNetwork(network, data->entries[choice].input);
 
       for(int layer = network->num_layers-1; layer >= 1; layer--) {
 
          for(int k = 0; k < network->sizes[layer]; k++) {
-            // float sol = data->entries[choice].output[k];
-            float sol = cur_desired[k];
+            float sol = data->entries[choice].output[k];
 
             network->layers[layer][k].bias += EPSILON * (sol - network->layers[layer][k].out);
             // for each weight of the k th neurone
@@ -198,18 +187,12 @@ void train(NETWORK *network, TRAINING_DATA *data)
                network->layers[layer][k].weight[j] += EPSILON *
                                                       (sol - network->layers[layer][k].out) * 
                                                       data->entries[choice].input[j]; 
-               // next_desired[j] +=  / network->sizes[layer-1];
             }
          }
-
-         if(layer > 1) {
-            memcpy(cur_desired, next_desired, sizeof(float) * network->sizes[layer-1]);
-         }
       }
+
    }
 
-   free(cur_desired);
-   free(next_desired);
 }
 
 TRAINING_DATA *readTrainingData(const char *filename)
@@ -298,15 +281,15 @@ int main(int argc, char *argv[])
 
    const int layer_sizes[] = {data->num_in, data->num_out};
    NETWORK *network = initNetwork(2, layer_sizes);
-   train(network, data);
+   trainNetwork(network, data);
 
-   float At_im[] = {1, 1, 1, 1,
-                    1, 0, 0, 0,
-                    1, 0, 0, 0,
-                    1, 0, 0, 0,
-                    1, 1, 1, 1};
+   float test_im[] = {0, 0, 0, 0,
+                      0, 0, 1, 0,
+                      0, 1, 0, 1,
+                      0, 1, 1, 1,
+                      0, 1, 0, 1};
 
-   evaluate(network, At_im);
+   evaluateNetwork(network, test_im);
    dumpNetwork(network);
 
    destroyNetwork(&network);
