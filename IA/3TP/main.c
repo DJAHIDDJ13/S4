@@ -4,11 +4,10 @@
 #include <string.h>
 
 #define EPSILON 0.001
-#define CLEAN_FREE(a) ()
+#define BIAS_EPSILON 0.1 
 
 typedef struct neurone {
    float *weight;
-   float bias;
    float (*activation)(float);
    float out;
 } NEURONE;
@@ -16,6 +15,7 @@ typedef struct neurone {
 typedef struct network {
    int num_layers;
    NEURONE **layers;
+   float *biases;
    int *sizes;
 } NETWORK;
 
@@ -76,6 +76,7 @@ NETWORK* initNetwork(int num_layers, const int layer_sizes[])
    network->num_layers = num_layers;
 
    network->layers = malloc(sizeof(NEURONE*) * num_layers);
+   network->biases = calloc(sizeof(float), num_layers); 
 
    network->sizes = malloc(sizeof(int) * num_layers);
 
@@ -96,10 +97,6 @@ NETWORK* initNetwork(int num_layers, const int layer_sizes[])
 
       for(int i = 0; i < layer_sizes[layer]; i++) {
          network->layers[layer][i].weight = calloc(sizeof(float), size);
-         network->layers[layer][i].bias = rand()/RAND_MAX;
-         for(int j = 0; j < size; j++) {
-            network->layers[layer][i].weight[j] = rand()/RAND_MAX;
-         }
          network->layers[layer][i].activation = func;
       }
    }
@@ -161,7 +158,7 @@ void evaluateNetwork(NETWORK* network, float* data)
             cur_neurone->out += prev_neurone->out * cur_neurone->weight[j];
          }
 
-         cur_neurone->out = cur_neurone->activation(cur_neurone->out - cur_neurone->bias);
+         cur_neurone->out = cur_neurone->activation(cur_neurone->out - network->biases[layer]);
       }
    }
 }
@@ -180,13 +177,13 @@ void trainNetwork(NETWORK *network, TRAINING_DATA *data)
 
          for(int k = 0; k < network->sizes[layer]; k++) {
             float sol = data->entries[choice].output[k];
-
-            network->layers[layer][k].bias += EPSILON * (sol - network->layers[layer][k].out);
+            network->biases[layer] -= BIAS_EPSILON * (sol - network->layers[layer][k].out); 
+            
             // for each weight of the k th neurone
             for(int j = 0; j < network->sizes[layer-1]; j++) {
                network->layers[layer][k].weight[j] += EPSILON *
                                                       (sol - network->layers[layer][k].out) * 
-                                                      data->entries[choice].input[j]; 
+                                                      network->layers[layer-1][j].out; 
             }
          }
       }
