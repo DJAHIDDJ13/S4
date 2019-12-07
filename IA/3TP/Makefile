@@ -1,4 +1,4 @@
-FLAGS=-Wall
+FLAGS=-Wall -g
 LIBS=-lm
 
 all: main.o

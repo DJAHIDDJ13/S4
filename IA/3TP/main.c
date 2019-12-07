@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
-#define EPSILON 0.01
-#define ARRAY_LEN(a) (sizeof((a))/sizeof((a[0])))
+#define EPSILON 0.001
+#define CLEAN_FREE(a) ()
 
 typedef struct neurone {
    float *weight;
@@ -89,12 +90,16 @@ NETWORK* initNetwork(int num_layers, const int layer_sizes[])
          func = identity;
          size = 1;
       } else {
-         func = heaviside;
+         func = sigmoid;
          size = layer_sizes[layer - 1];
       }
 
       for(int i = 0; i < layer_sizes[layer]; i++) {
          network->layers[layer][i].weight = calloc(sizeof(float), size);
+         network->layers[layer][i].bias = rand()/RAND_MAX;
+         for(int j = 0; j < size; j++) {
+            network->layers[layer][i].weight[j] = rand()/RAND_MAX;
+         }
          network->layers[layer][i].activation = func;
       }
    }
@@ -110,19 +115,26 @@ void destroyNetwork(NETWORK** network_ptr)
       int cur_size = network->sizes[layer];
 
       for(int i = 0; i < cur_size; i++) {
-         free(network->layers[layer][i].weight);
+         if(network->layers[layer][i].weight)
+            free(network->layers[layer][i].weight);
          network->layers[layer][i].weight = NULL;
       }
 
-      free(network->layers[layer]);
+      if(network->layers[layer])
+         free(network->layers[layer]);
       network->layers[layer] = NULL;
    }
-
-   free(network->layers);
+   
+   if(network->layers)
+      free(network->layers);
    network->layers = NULL;
-   free(network->sizes);
+
+   if(network->sizes)
+      free(network->sizes);
    network->sizes = NULL;
 
+   if(*network_ptr)
+      free(*network_ptr);
    *network_ptr = NULL;
 }
 
@@ -158,21 +170,49 @@ void train(NETWORK *network, TRAINING_DATA *data)
 {
    int num_iter = 10000;
 
+   int max_layer_size = 0;
+   for(int i = 0; i < network->num_layers; i++) {
+      if(max_layer_size < network->sizes[i])
+         max_layer_size = network->sizes[i];
+   }
+
+   float *cur_desired  = malloc(sizeof(float) * max_layer_size);
+   float *next_desired = malloc(sizeof(float) * max_layer_size);
+   
    for(int i = 0; i < num_iter; i++) {
-      for(int k = 0; k < network->sizes[1]; k++) {
-         int choice = rand() % data->size;
+      int choice = rand() % data->size;
+      evaluate(network, data->entries[choice].input);
 
-         float sol = data->entries[choice].output[k];
-         evaluate(network, data->entries[choice].input);
+      // initialize to the desired output
+      memcpy(cur_desired, data->entries[choice].output, sizeof(float) * data->num_out);
 
-         for(int j = 0; j < network->sizes[0]; j++) {
-            network->layers[1][k].weight[j] += EPSILON * (sol - network->layers[1][k].out) * data->entries[choice].input[j];
+      for(int layer = network->num_layers-1; layer >= 1; layer--) {
+
+         for(int k = 0; k < network->sizes[layer]; k++) {
+            // float sol = data->entries[choice].output[k];
+            float sol = cur_desired[k];
+
+            network->layers[layer][k].bias += EPSILON * (sol - network->layers[layer][k].out);
+            // for each weight of the k th neurone
+            for(int j = 0; j < network->sizes[layer-1]; j++) {
+               network->layers[layer][k].weight[j] += EPSILON *
+                                                      (sol - network->layers[layer][k].out) * 
+                                                      data->entries[choice].input[j]; 
+               // next_desired[j] +=  / network->sizes[layer-1];
+            }
+         }
+
+         if(layer > 1) {
+            memcpy(cur_desired, next_desired, sizeof(float) * network->sizes[layer-1]);
          }
       }
    }
+
+   free(cur_desired);
+   free(next_desired);
 }
 
-TRAINING_DATA *read_training_data(const char *filename)
+TRAINING_DATA *readTrainingData(const char *filename)
 {
    FILE* f = fopen(filename, "r");
 
@@ -187,7 +227,6 @@ TRAINING_DATA *read_training_data(const char *filename)
       fprintf(stderr, "Cannot read number of data entries\n");
       exit(1);
    }
-   printf("%d\n", data->size);
    data->entries = malloc(sizeof(DATA_ENTRY) * data->size);
 
    if(data->entries == NULL) {
@@ -199,7 +238,6 @@ TRAINING_DATA *read_training_data(const char *filename)
       fprintf(stderr, "Cannot read input or output sizes\n");
       exit(1);
    }
-   printf("%d %d\n", data->num_in, data->num_out);
 
    for(int i = 0; i < data->size; i++) {
       data->entries[i].input  = malloc(sizeof(float) * data->num_in);
@@ -215,18 +253,14 @@ TRAINING_DATA *read_training_data(const char *filename)
             fprintf(stderr, "Cannot read input value entry=%d, value=%d\n", i, j);
             exit(1);
          }
-         printf("%g ", data->entries[i].input[j]);
       }
-      printf("\n");
 
       for(int j = 0; j < data->num_out; j++) {
          if(fscanf(f, "%f", &data->entries[i].output[j]) < 1) {
             fprintf(stderr, "Cannot read input value entry=%d, value=%d\n", i, j);
             exit(1);
          }
-         printf("%g ", data->entries[i].output[j]);
       }
-      printf("\n");
 
    }
 
@@ -235,7 +269,7 @@ TRAINING_DATA *read_training_data(const char *filename)
    return data;
 }
 
-void free_training_data(TRAINING_DATA **data)
+void destoryTrainingData(TRAINING_DATA **data)
 {
    for(int i = 0; i < (*data)->size; i++) {
       if((*data)->entries[i].input)
@@ -260,22 +294,23 @@ void free_training_data(TRAINING_DATA **data)
 
 int main(int argc, char *argv[])
 {
-   TRAINING_DATA *data = read_training_data("training_data.txt");
+   TRAINING_DATA *data = readTrainingData("training_data.txt");
 
    const int layer_sizes[] = {data->num_in, data->num_out};
    NETWORK *network = initNetwork(2, layer_sizes);
    train(network, data);
 
    float At_im[] = {1, 1, 1, 1,
-                    1, 0, 0, 1,
-                    1, 1, 1, 1,
-                    1, 0, 0, 1,
-                    1, 0, 0, 1};
+                    1, 0, 0, 0,
+                    1, 0, 0, 0,
+                    1, 0, 0, 0,
+                    1, 1, 1, 1};
 
    evaluate(network, At_im);
    dumpNetwork(network);
 
    destroyNetwork(&network);
-   free_training_data(&data);
+   destoryTrainingData(&data);
    return 0;
 }
+
