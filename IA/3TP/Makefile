@@ -1,12 +1,18 @@
 FLAGS=-Wall -g
 LIBS=-lm
+DOC=doc
 
-all: main.o
-	gcc main.o -o main $(FLAGS) $(LIBS)
+all: perceptron.o
+	gcc perceptron.o -o perceptron $(FLAGS) $(LIBS)
 
-main.o: main.c
-	gcc -c main.c $(FLAGS)
+perceptron.o: perceptron.c
+	gcc -c perceptron.c $(FLAGS)
 
-PHONY: clean
+doc: $(DOC)/rapport.pdf
+
+$(DOC)/rapport.pdf: $(DOC)/rapport.tex
+	cd $(DOC) && pdflatex rapport.tex # compile pdf
+
+PHONY: clean doc
 clean:
-	rm -f *.o main
+	rm -f *.o perceptron
