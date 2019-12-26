@@ -1,0 +1,19 @@
+Ce TP est programmé en C et OpenGL.
+
+Le C est un language universel, de même que l'OpenGL, 
+toutefois ce dernier a besoin d'un gestionnaire d'initialisation. Nous utilisons ici "GLUT".
+
+GLUT est parfois appelé differement sous windows, mac ou linux, le TP, comme tout vos TP est principalement préparé pour Linux. 
+Si vous desirez tout de même utiliser MAC ou Windows. Libre à vous. 
+
+Néanmoins quelques modifications sont sans doute necessaire, notemment au niveau des include.
+
+Par exemple sous MAC vous pouvez prendre exemple sur ce tuto : 
+https://ensiwiki.ensimag.fr/index.php?title=OpenGL_sous_Mac
+
+Pour windows il faut télécharger les binaires de GLUT : 
+http://freeglut.sourceforge.net/
+
+Dans les deux cas c'est à vous de modifier les fichiers du TP, nous ne pourrons pas vous aider sur ces points durant le TP. 
+En réalité nous vous recommandons plutot de passer par une instalation de linux ou par une machine virtuelle pour coder. Les astuces ci-dessus ne sont que pour les plus tétu d'entre vous ;) 
+

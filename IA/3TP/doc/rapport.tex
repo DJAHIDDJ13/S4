@@ -35,10 +35,11 @@
 \maketitle
 
 \section{Questions préliminaires}
-Schéma de réseau:
+Pour la reconnaissance de deux classes A et C il nou faudra 20 neurones
+d'entrées pour le pixels de motif, et 2 neurone de sortie pour chaque classe.
 \begin{figure}[H]
    \centering
-   \includegraphics[height=20em]{ACnn.pdf}
+   \includegraphics[height=20em]{ACrn.png}
    \caption{Schéma de réseau neurone pour classification de A et C}
 \end{figure}
 
@@ -58,15 +59,15 @@ typedef struct network {
 } NETWORK;
 \end{lstlisting}
 
-Les poids de réseau neurones sont initialisé avec des valeur aléatoires entre
+Les poids de réseau neurones sont initialisé avec des valeurs aléatoires entre
 0 et 1, les biais est mis à 0.\\
 
-La propagation de neurone de sortie $j$ se fait par la formule suivant
+La propagation de neurone de sortie $j$ se fait par la formule suivant:
 \begin{equation}
    \sum^{input\_size}_{i=1} f(W_{i j} * e_{i} - \theta_{1})
 \end{equation}
 
-Pour l'apprentisage, on met les poids suivant ce formule:
+Pour l'apprentisage, on met à jour les coefficient comme suit:
 \begin{equation}
    W_{ij}(t+1) = W_{ij} + \epsilon * (Sd^c(i) - Xout_{i}(i)) * Xin_{i}(t)
 \end{equation}
@@ -80,17 +81,20 @@ L'apprentissage s'arrête lorsqu'on atteint un niveau d'erreur acceptable
 prédefini.
 
 \section{Question de compréhension}
-L'apprentisage minimise une fonction d'erreur pour chaque neurone de sortie.\\
+Le processus d'apprentissage consiste à minimiser une fonction d'erreur à un
+certain minimum local, et pour le cas des deux lettres, le réseau fonctionne
+comme un modèle de régression linéaire.\\
 
-En cas de translation ou rotation de motif le réseau ne pourra pas s'adapter
-parce que les données d'entrees sont limitées (2 motifs).
+En cas de translation ou rotation le réseau se généralise correctement et
+parvient à classer les deux lettres.\\
 
+Pour la reconnaissance de lettres de l'alphabet le réseau neurone aura 20
+neurones d'entrées (pour chaque pixel), et 26 neurone de sortie pour chaque
+lettre de l'alphabet
 \begin{figure}[H]
    \centering
-   \includegraphics[height=20em]{AZnn.pdf}
-   \caption{Schéma de réseau neurone pour classification de lettres}
+   \includegraphics[height=20em]{AZrn.png}
+   \caption{Schéma de réseau neurone pour classification de lettres d'alphabet}
 \end{figure}
-
-
 
 \end{document}

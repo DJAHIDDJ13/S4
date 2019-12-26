@@ -3,8 +3,8 @@ Pour executer ./perceptron A_C_data.txt A_C_tests.txt ou
 ./perceptron alphabet_data.txt alphabet_tests_10_percent.txt 
 ./perceptron alphabet_data.txt alphabet_tests_20_percent.txt
 ./perceptron alphabet_data.txt alphabet_tests_30_percent.txt
-Le pourcentage la est le taux de bruit
+Le pourcentage la est le taux de bruit (géneré par noise.py)
 
 
 Par defaut la fonction d'activation est sigmoid, pour changer ca regarder
-perceptron.c ligne 142
+perceptron.c ligne 155

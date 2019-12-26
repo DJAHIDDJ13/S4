@@ -6,24 +6,27 @@
 #define EPSILON 0.01
 #define BIAS_EPSILON 0.1
 
+// structure pour chaque neurone
 typedef struct neurone {
-   float *weight;
-   float (*activation)(float);
+   float *weight; // tableau de poids
+   float (*activation)(float); // la fonction d'activation
    float out;
 } NEURONE;
 
 typedef struct network {
    int num_layers;
-   NEURONE **layers;
+   NEURONE **layers; 
    float *biases;
-   int *sizes;
+   int *sizes; // les tailles de chaque couche dans layers
 } NETWORK;
 
+// pour stocker un entrée de données
 typedef struct training_data_entry {
    float *input;
    float *output;
 } DATA_ENTRY;
 
+// données d'entrainement
 typedef struct training_data {
    int size;
    int num_in, num_out;
@@ -149,7 +152,7 @@ NETWORK* initNetwork(int num_layers, const int layer_sizes[])
          func = identity;
          size = 1;
       } else {
-         func = sigmoid; // CHANGE THE ACTIVATION FUNCTION HERE sigmoid or heaviside
+         func = heaviside; // CHANGE THE ACTIVATION FUNCTION HERE sigmoid or heaviside
          size = layer_sizes[layer - 1];
       }
 
@@ -169,7 +172,7 @@ NETWORK* initNetwork(int num_layers, const int layer_sizes[])
 /**
  * Liberate the memory fo the network
  */
-void destroyNetwork(NETWORK** network_ptr)
+void freeNetwork(NETWORK** network_ptr)
 {
    NETWORK* network = *network_ptr;
 
@@ -343,7 +346,7 @@ TRAINING_DATA *readTrainingData(const char *filename)
 /**
  * Frees up the training data
  */
-void destoryTrainingData(TRAINING_DATA **data)
+void freeTrainingData(TRAINING_DATA **data)
 {
    for(int i = 0; i < (*data)->size; i++) {
       if((*data)->entries[i].input) {
@@ -444,9 +447,9 @@ int main(int argc, char *argv[])
 
    testNetwork(network, test_data);
 
-   destroyNetwork(&network);
-   destoryTrainingData(&train_data);
-   destoryTrainingData(&test_data);
+   freeNetwork(&network);
+   freeTrainingData(&train_data);
+   freeTrainingData(&test_data);
 
    return 0;
 }
