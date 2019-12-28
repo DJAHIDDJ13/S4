@@ -22,7 +22,7 @@ utilise GL et glut
 #define DEFAULT_WIDTH  500
 #define DEFAULT_HEIGHT 500
 #define NB_VILLE 21
-#define MODE 1
+#define MODE 0
 
 int cpt = 0;
 int calc = 0;
@@ -36,10 +36,15 @@ GLuint textureID;
 int width  = DEFAULT_WIDTH;
 int height = DEFAULT_HEIGHT;
 
+unsigned char * img = NULL;
+
+/* Global variables for the network */
+float EPSILON = 0.1;
 KOHONEN* map;
 TRAINING_DATA* DataSet;
 
-TRAINING_DATA* initialiseSet1()
+/* Exercice 1: initilize the data with random values between 0, 200 */
+TRAINING_DATA* initialiseSet()
 {
    TRAINING_DATA* DataSet = initTrainingData(20, 2);
 
@@ -51,33 +56,75 @@ TRAINING_DATA* initialiseSet1()
    return DataSet;
 }
 
-void resetMap(KOHONEN* m)
+/* Reset the weights of the maps to random values between minval and maxval*/
+void resetMap(KOHONEN* m, int minval, int maxval)
 {
-   int minval = 50;
-   int maxval = 750;
    for (int i = 0; i < m->sizeX * m->sizeY; i++) {
-      m->weight[i][0] = rand() % (minval + maxval) - minval;
-      m->weight[i][1] = rand() % (minval + maxval) - minval;
+      for (int j = 0; j < m->sizeInput; j++) {
+         m->weight[i][j] = ((float)rand()) / ((float)RAND_MAX) *  (minval + maxval) - minval;
+      }
    }
 }
 
-void snapToData(KOHONEN* m, TRAINING_DATA* data) 
+
+/**
+ * Snap the neurones' weights to the closest data entry (with smallest
+ * euclidian distance) in order to find the solution to the travelling salesman
+ * problem (finding the result path)
+ */
+void snapToData(KOHONEN* m, TRAINING_DATA* data)
 {
-   for (int i = 0; i < m->sizeX * m->sizeY; i++) {
+   int total_size = m->sizeX * m->sizeY;
+   int *seen = calloc(total_size, sizeof(float));
+
+   // for each city
+   for(int i = 0; i < data->numInput; i++) {
       int closestArg = -1;
       float closest = 0;
-      for(int j = 0; j < data->numInput; j++) {
-         float dist = euclidianDistance(data->input[j], m->weight[i], data->sizeInput);
-         if(dist < closest || closestArg == -1) {
-            closestArg = j; closest = dist;
+
+      // find the neurone that is closest to that city
+      for(int j = 0; j < total_size; j++) {
+         float dist = euclidianDistance(data->input[i], m->weight[j], data->sizeInput);
+
+         // while making sure that it was not taken by another city
+         if(closestArg == -1 || (dist < closest && seen[j] == 0)) {
+            closestArg = j;
+            closest = dist;
          }
       }
 
-      memcpy(m->weight[i], data->input[closestArg], sizeof(float) * data->sizeInput);
+      // mark the neurone as taken and snap its coordinates to the city's
+      seen[closestArg] = 1;
+      memcpy(m->weight[closestArg], data->input[i], sizeof(float) * data->sizeInput);
    }
+
+   // handling the excess neurones (because usually we use more neurones than
+   // there are data entries to find the best path
+   int last_snap = -1; // variable to store the index of the last neurone that has been snapped to a city
+
+   for (int i = 0; i < total_size; i++) {
+      // update the index of the last neurone that had been snapped to a city
+      // and skip because we don't want to change its coordinates anymore
+      if(last_snap == -1 || seen[i] == 1) {
+         last_snap = i;
+         continue;
+      }
+
+      // if the neurone is an excess (meaning it wasn't the closest to any
+      // city), assign the coordinates of the last neurone (in order of the
+      // network's topology ie from 0 to sizeX) that has been snapped to it.
+      memcpy(m->weight[i], m->weight[last_snap], sizeof(float) * data->sizeInput);
+   }
+
+   // The result path can be extract from the values of last_snap
+
+   free(seen);
 }
 
-TRAINING_DATA* initialiseSet2()
+
+/* Exercice 2
+ * Initialize the training data to the cities' locations */
+TRAINING_DATA* initialiseCitiesData()
 {
    TRAINING_DATA* DataSet = initTrainingData(NB_VILLE, 2);
 
@@ -89,24 +136,86 @@ TRAINING_DATA* initialiseSet2()
    return DataSet;
 }
 
-float phi1(float x)
+/** Exercice 3
+ * Initialize the training data to be the colors of the original image pixels
+ */
+TRAINING_DATA* initialiseImageData()
 {
-   float lambda = 0.5;
-   float beta = 0.1;
+   // dividing the pixels of the image into blocks of size block_width x block_width 
+   // so it works for larger images with much more pixels
+   int block_width = 1;
+   TRAINING_DATA* DataSet = initTrainingData(width * height / (block_width * block_width), 3);
+   
+   int entryNum = 0;
+   for (int i = 0; i < width; i += block_width) {
+      for (int j = 0; j < height; j += block_width) {
+         int sR = 0,
+             sG = 0,
+             sB = 0;
+         int total = 0;
+         int limx = (width < i + block_width)? width: i + block_width;
+         int limy = (height < j + block_width)? height: j + block_width;
+
+         for (int x = i; x < limx; x++) {
+            for (int y = j; y < limy; y++) {
+               int pix = x * width + y;
+               sR += img[3 * pix + 0]; 
+               sG += img[3 * pix + 1]; 
+               sB += img[3 * pix + 2];
+               total ++;
+            }
+         }
+
+         DataSet->input[entryNum][0] = ((float)sR) / total;
+         DataSet->input[entryNum][1] = ((float)sG) / total;
+         DataSet->input[entryNum][2] = ((float)sB) / total;
+         entryNum++;
+      }
+   }
+   for(int i = 0; i < DataSet->numInput; i++) {
+      int j = 3 * i;
+      for (int x = 0; x < block_width; x++) {
+         for (int y = 0; y < block_width; y++) {
+            DataSet->input[i][0] = img[j    ] ;
+            DataSet->input[i][1] = img[j + 1];
+            DataSet->input[i][2] = img[i + 2];
+         }
+      }
+   }
+
+   return DataSet;
+}
+
+float phi(float x)
+{
+   float lambda = 0.4;
+   float beta = 0.05;
 
    if(x < 1) {
       return 1;
    } else if(x < 2) {
-      return 0.4;
+      return lambda;
    } else if(x < 3) {
       return 0.2;
    } else if(x < 4) {
-      return 0.05;
+      return beta;
    }
 
    return 0;
 }
 
+float phi3(float x)
+{
+   if(x < 1) {
+      return 1;
+   } else if(x < 2) {
+      return 0.5;
+   } else if(x < 3) {
+      return 0.2;
+   }
+
+   return 0;
+}
 
 /* affiche la chaine fmt a partir des coordonnées x,y*/
 void draw_text(float x, float y, const char *fmt, ...)
@@ -207,25 +316,25 @@ void initGL(int w, int h)
 
 #if MODE
    int taille_point = 15;
+   glViewport(0, 0, w, h); // use a screen size of WIDTH x HEIGHT
 #else
    int taille_point = 5;
+   glViewport(0, 0, 256, 256); // use a screen size of WIDTH x HEIGHT
 #endif
 
-   glViewport(0, 0, w, h); // use a screen size of WIDTH x HEIGHT
    glEnable(GL_TEXTURE_2D);     // Enable 2D texturing
-
    glMatrixMode(GL_PROJECTION);     // Make a simple 2D projection on the entire window
    glLoadIdentity();
 
 #if MODE
    glOrtho(0.0, w, h, 0.0, -1, 1);
 #else
-   glOrtho(0.0, 200, 200, 0.0, -1, 1);
+   glOrtho(0.0, 256, 256, 0.0, -10, 10);
 #endif
 
    glPointSize(taille_point);
    glMatrixMode(GL_MODELVIEW);    // Set the matrix mode to object modeling
-
+   
    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
    glClearDepth(0.0f);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the window
@@ -235,31 +344,43 @@ void initGL(int w, int h)
 /* main */
 int main(int argc, char **argv)
 {
-
-#if MODE
-   unsigned char * data = NULL;
-
    if (argc != 2) {
       EXIT_ON_ERROR("You must specified a .ppm file");
    }
 
-   data = transform_img_to_vector(argv[1], &width, &height);
+   img = transform_img_to_vector(argv[1], &width, &height);
+
+#if MODE
    load_cities();
 
-   map = initKohonen(50, 1, 2, phi1);
-   resetMap(map);
-   DataSet = initialiseSet2();
+   // INITIALIZING THE NETWORK
+   map = initKohonen(50, 1, 2, phi); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
+   resetMap(map, 50, 750); // randomize the values of the weights
+   DataSet = initialiseCitiesData(); // load the location of the cities into the training data
+#else
+
+   // INITIALIZING THE NETWORK
+   int numCol = 16; // can be 32, 256 for more colors
+   int networkSize = log(numCol) / log(2.0);
+   map = initKohonen(networkSize, networkSize, 3, phi3); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
+   resetMap(map, 0, 256); // randomize the values of the weights
+   DataSet = initialiseImageData(); // load the location of the cities into the training data
 #endif
 
    /* GLUT init */
    glutInit(&argc, argv);            // Initialize GLUT
    glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
+#if MODE
    glutInitWindowSize(width, height);   // Set the window's initial width & height
+#else
+   glutInitWindowSize(512, 512);   // Set the window's initial width & height
+#endif
    glutCreateWindow("Kohonen");      // Create window with the name of the executable
 
    /* enregistrement des fonctions de rappel */
    glutDisplayFunc(affichage);
    glutKeyboardFunc(clavier);
+   glutSpecialFunc(clavierSpecial);
    glutReshapeFunc(reshape);
    glutIdleFunc(idle);
    glutMouseFunc(mouse);
@@ -269,19 +390,19 @@ int main(int argc, char **argv)
    initGL(width, height);
 
 #if MODE
-   textureID = charger_texture(data);
-
-   if (data != NULL) {
-      free(data);
-      data = NULL;
-   }
-
+   textureID = charger_texture(img);
 #endif
 
    /* Main loop */
    glutMainLoop();
 
 #if MODE
+
+   if (img != NULL) {
+      free(img);
+      img = NULL;
+   }
+
    /* Delete used resources and quit */
    glDeleteTextures(1, &textureID);
    freeTrainingData(&DataSet);
@@ -296,27 +417,156 @@ int main(int argc, char **argv)
 /* Helper for HSLtoRGB */
 float HueToRgb(float p, float q, float t)
 {
-    if (t < 0.0f) t += 1.0f;
-    if (t > 1.0f) t -= 1.0f;
-    if (t < 1.0f / 6.0f) return p + (q - p) * 6.0f * t;
-    if (t < 1.0f / 2.0f) return q;
-    if (t < 2.0f / 3.0f) return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
-    return p;
+   if (t < 0.0f) {
+      t += 1.0f;
+   }
+
+   if (t > 1.0f) {
+      t -= 1.0f;
+   }
+
+   if (t < 1.0f / 6.0f) {
+      return p + (q - p) * 6.0f * t;
+   }
+
+   if (t < 1.0f / 2.0f) {
+      return q;
+   }
+
+   if (t < 2.0f / 3.0f) {
+      return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
+   }
+
+   return p;
 }
-/* Convert HSL color to RGB */
+/* Convert HSL (Hue, Saturation, Lightness) color to RGB
+ * Used to make the sliding color effect on the neurones display */
 void HSLtoRGB(float H, float S, float L, float *R, float *G, float *B)
 {
-    if (S == 0.0f)
-        *R = *G = *B = L;
-    else
-    {
-        float q = L < 0.5f ? L * (1.0f + S) : L + S - L * S;
-        float p = 2.0f * L - q;
-        *R = HueToRgb(p, q, H + 1.0f / 3.0f);
-        *G = HueToRgb(p, q, H);
-        *B = HueToRgb(p, q, H - 1.0f / 3.0f);
-    }
+   if (S == 0.0f) {
+      *R = *G = *B = L;
+   } else {
+      float q = L < 0.5f ? L * (1.0f + S) : L + S - L * S;
+      float p = 2.0f * L - q;
+      *R = HueToRgb(p, q, H + 1.0f / 3.0f);
+      *G = HueToRgb(p, q, H);
+      *B = HueToRgb(p, q, H - 1.0f / 3.0f);
+   }
 }
+
+/**
+ * Draw the network
+ */
+void drawKohonen2D(KOHONEN* m)
+{
+   int total_size = m->sizeX * m->sizeY;
+
+   // draw neurones
+   float H = 0;
+   float S = 1, L = 0.5; // saturation 100% and Lightness 50%
+   float R, G, B;
+
+   for (int i = 0; i < total_size; i++) {
+      HSLtoRGB(H, S, L, &R, &G, &B);
+
+      glBegin(GL_POINTS);
+      glColor3f(R, G, B);
+      glVertex2f(m->weight[i][0], m->weight[i][1]);
+      glEnd();
+      glColor3f(0, 0, 0);
+
+      H = ((float)i) / (total_size - 1); // go through all hue values from 0 to 1 (to get all the colors)
+   }
+
+   glLineWidth(2);
+
+   // draw synapses
+   for (int i = 0; i < m->sizeY; i++) {
+      for (int j = 0; j < m->sizeX; j++) {
+         int cur_point    = i       * m->sizeX +  j,
+             bottom_point = i       * m->sizeX + (j + 1),
+             right_point  = (i + 1) * m->sizeX +  j;
+
+         // Draw a line into the right neighbor
+         if(right_point < total_size) {
+            glBegin(GL_LINES);
+            glColor3f(0.0, 0.0, 1.0);
+            glVertex2f(m->weight[cur_point][0], m->weight[cur_point][1]);
+            glVertex2f(m->weight[right_point][0], m->weight[right_point][1]);
+            glEnd();
+         }
+
+         // Draw the line into the bottom neighbor
+         if(bottom_point < total_size) {
+            glBegin(GL_LINES);
+            glColor3f(0.0, 0.0, 1.0);
+            glVertex2f(m->weight[cur_point][0], m->weight[cur_point][1]);
+            glVertex2f(m->weight[bottom_point][0], m->weight[bottom_point][1]);
+            glEnd();
+         }
+
+         glColor3f(0.0, 0.0, 0.0); // reset color
+      }
+   }
+
+}
+
+void drawKohonenRGB(KOHONEN* m)
+{
+   int wx = 256 / m->sizeX,
+       wy = 256 / m->sizeY;
+
+   for (int i = 0; i < m->sizeX; i++) {
+      for (int j = 0; j < m->sizeY; j++) {
+         int x = i * 256 / m->sizeX,
+             y = j * 256 / m->sizeY;
+         
+         glPushMatrix();
+         glTranslatef(x, y, 0.0f);
+         
+         glBegin(GL_QUADS);
+            glColor3f(m->weight[i * m->sizeX + j][0]/256.0, 
+                      m->weight[i * m->sizeX + j][1]/256.0, 
+                      m->weight[i * m->sizeX + j][2]/256.0);
+            glVertex2f(0 , 0 );
+            glVertex2f(wx, 0 );
+            glVertex2f(wx, wy);
+            glVertex2f(0 , wy);
+         glEnd();
+         glPopMatrix();
+      }
+   }
+}
+
+void writeCompressed()
+{
+   Image* image = malloc(sizeof(Image));
+   image->x = width;
+   image->y = height;
+
+   image->data = malloc(sizeof(char) * 3 * width * height);
+   for (int p = 0; p < width * height; p++) {
+      int c = 3 * p;
+      
+      int minval = 0.0;
+      int argmin = -1;
+      for(int i = 0; i < map->sizeX * map->sizeY; i++) {
+         float dist = (img[c + 0] + map->weight[i][0]) * (img[c + 0] + map->weight[i][0])
+                    + (img[c + 1] + map->weight[i][1]) * (img[c + 1] + map->weight[i][1]) 
+                    + (img[c + 2] + map->weight[i][2]) * (img[c + 2] + map->weight[i][2]);
+         if(argmin == -1 || minval > dist) {
+            minval = dist;
+            argmin = i;
+         }
+      }
+      printf("Argmin = %d\n", argmin);
+      image->data[p].r = map->weight[argmin][0];
+      image->data[p].g = map->weight[argmin][1];
+      image->data[p].b = map->weight[argmin][2];
+   }
+   writePPM("compressed.ppm", image);
+}
+
 /* fonction d'affichage appelée a chaque refresh*/
 void affichage()
 {
@@ -330,14 +580,14 @@ void affichage()
    /* Draw a quad */
    glColor3f(1.0, 1.0, 1.0);
    glBegin(GL_QUADS);
-   glTexCoord2i(0, 0);
-   glVertex2i(0,   0);
-   glTexCoord2i(0, 1);
-   glVertex2i(0,   height);
-   glTexCoord2i(1, 1);
-   glVertex2i(width, height);
-   glTexCoord2i(1, 0);
-   glVertex2i(width, 0);
+      glTexCoord2i(0, 0);
+      glVertex2i(0,   0);
+      glTexCoord2i(0, 1);
+      glVertex2i(0,   height);
+      glTexCoord2i(1, 1);
+      glVertex2i(width, height);
+      glTexCoord2i(1, 0);
+      glVertex2i(width, 0);
    glEnd();
 
    for (i = 0; i < NB_VILLE; i++) {
@@ -349,81 +599,19 @@ void affichage()
       draw_text(ville[i].x - 20, ville[i].y + 20, "%s", ville[i].name);
    }
 
-   int total_size = map->sizeX * map->sizeY;
+   /* Draw the network */
+   drawKohonen2D(map);
 
-   // draw neurones
-   float H = 0;
-   float S = 1, L = 0.5;
-   float R, G, B;
-   for (i = 0; i < total_size; i++) {
-      HSLtoRGB(H,S,L, &R,&G,&B);
-      
-      glBegin(GL_POINTS);
-      glColor3f(R, G, B);
-      glVertex2f(map->weight[i][0], map->weight[i][1]);
-      glEnd();
-      glColor3f(0, 0, 0);
-
-      H = ((float)i) / (total_size-1);
-   }
-   
-   // draw synapses
-   for (i = 0; i < map->sizeY; i++) {
-      for (int j = 0; j < map->sizeX; j++) {
-         int cur_point    = i     * map->sizeX + j,
-             bottom_point = i     * map->sizeX + (j + 1),
-             right_point  = (i + 1) * map->sizeX + j;
-         
-         
-         if(right_point < total_size) {
-            glBegin(GL_LINES);
-            glColor3f(0.0, 0.0, 1.0);
-            glVertex2f(map->weight[cur_point][0], map->weight[cur_point][1]);
-            glVertex2f(map->weight[right_point][0], map->weight[right_point][1]);
-            glEnd();
-         }
-
-         if(bottom_point < total_size) {
-            glBegin(GL_LINES);
-            glColor3f(0.0, 0.0, 1.0);
-            glVertex2f(map->weight[cur_point][0], map->weight[cur_point][1]);
-            glVertex2f(map->weight[bottom_point][0], map->weight[bottom_point][1]);
-            glEnd();
-         }
-
-         glColor3f(0.0, 0.0, 0.0);
-      }
-   }
-
-// glColor3f(1.0, 1.0, 1.0);
-
+   glColor3f(0.0, 0.0, 0.0);
    draw_text(60, 70, "nb iter: %d", cpt);
+   draw_text(60, 85, "EPSILON: %.2f", EPSILON);
 #else
+   drawKohonenRGB(map);
 
-// VOTRE CODE D'AFFICHAGE ICI, voir l'exemple ci-dessous
-
-// ceci est un exemple pour tracer des points et des lignes
-   glBegin(GL_POINTS);
-   glColor3f(1.0, 0.0, 0.0);
-   glVertex2f(50, 25);
-   glEnd();
-
-   glBegin(GL_POINTS);
-   glColor3f(1.0, 0.0, 0.0);
-   glVertex2f(75, 10);
-   glEnd();
-
-   glBegin(GL_LINE_LOOP);
-   glColor3f(1.0, 0.0, 0.0);
-   glVertex2f(50, 25);
-   glVertex2f(75, 10);
-   glEnd();
-
-   glColor3f(1.0, 1.0, 1.0);
+   glColor3f(0.0, 0.0, 0.0);
    draw_text(150, 20, "nb iter: %d", cpt);
-
+   draw_text(150, 15, "EPSILON: %.2f", EPSILON);
 #endif
-
 
 
    glFlush();
@@ -437,7 +625,7 @@ void idle()
       cpt++; // un simple compteur
 
       int choice  = rand() % DataSet->numInput;
-      updateKohonen(map, DataSet->input[choice]);
+      updateKohonen(map, DataSet->input[choice], EPSILON);
 
       /*for(int i = 0; i < 20; i++) {
          printf("%g %g\n", map->weight[i][0], map->weight[i][1]);
@@ -447,26 +635,63 @@ void idle()
       glutPostRedisplay();
    }
 }
+void clavierSpecial(int touche, int x, int y)
+{
+   switch(touche) {
+   case GLUT_KEY_UP:
+      EPSILON = fmin(EPSILON + 0.02, 2);
+      printf("Updated epsilon value %g\n", EPSILON);
+      break;
 
+   case GLUT_KEY_DOWN:
+      EPSILON = fmax(EPSILON - 0.02, 0.01);
+      printf("Updated epsilon value %g\n", EPSILON);
+      break;
 
+   case GLUT_KEY_LEFT:
+   case GLUT_KEY_RIGHT:
+      EPSILON = 0.1;
+      printf("Updated epsilon value %g\n", EPSILON);
+      break;
+   }
+
+   glutPostRedisplay();
+}
 void clavier(unsigned char touche, int x, int y)
 {
    switch (touche) {
    case 'p':
       calc = !calc;
       break;
+
    case 's': // Snap the kohonen map to the data
+#if MODE
       snapToData(map, DataSet);
-      glutPostRedisplay();
+      printf("Snapping neuones to the data\n");
+#else
+      if(calc) {
+         printf("Please stop the learning to save, press p\n");
+      } else {
+         printf("Saving compressed image to ./compressed.ppm\n");
+         writeCompressed(); 
+      }
+#endif
       break;
+
    case 'r':
-      resetMap(map);
-      glutPostRedisplay();
+#if MODE
+      resetMap(map, 50, 750);
+#else
+      resetMap(map, 0, 256);
+#endif
+      printf("Randomizing the neurones' weights..\n");
       break;
+
    case 'q': /* la touche 'q' permet de quitter le programme */
       exit(0);
    } /* switch */
 
+   glutPostRedisplay();
 } /* clavier */
 
 
@@ -474,9 +699,9 @@ void reshape(GLsizei newwidth, GLsizei newheight)
 {
    // On ecrase pas width et height dans le cas image car il s'agira de la taille de l'image
 #if MODE
-#else
    width = newwidth;
    height = newheight;
+#else
 #endif
    // Set the viewport to cover the new window
    glViewport(0, 0, newwidth, newheight );
@@ -486,7 +711,7 @@ void reshape(GLsizei newwidth, GLsizei newheight)
 #if MODE
    glOrtho(0.0, width, height, 0.0, -1, 1);
 #else
-   glOrtho(0.0, 200, 200, 0.0, -1, 1);
+   glOrtho(0.0, 256, 256, 0.0, -10, 10);
 #endif
 
    glMatrixMode(GL_MODELVIEW);

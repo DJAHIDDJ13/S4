@@ -50,6 +50,34 @@ void freeKohonen(KOHONEN **map)
    *map = NULL;
 }
 
+/**
+ * A ring topology for the neurones ie the 0th and sizeX-1th neurones are neighbors
+ * to find a loop (end of the path is at the start) for the traveling salesman problem
+ */
+float loopTopologicalDistance(int row_size, int column_size, int a, int b)
+{
+   int aX =  a % row_size;
+   int aY = ((int) a / row_size);
+
+   int bX = b % row_size;
+   int bY = ((int) b / row_size);
+ 
+
+   // --------o--------------o----------- // the two o's are the indices of the two we want to compare
+   // ________o--------------o___________ // the reverse distance
+   // --------o______________o----------- // the normal distance
+   // we take the minimum between these two distances to get the 
+   return fmin(
+            fabs(aX - bX),                        // normal distance between the two  
+            row_size - fmax(aX, bX) + fmin(aX,bX) // distance if we go the other direction ie through the 0
+          ) +
+
+          fmin(
+            fabs(aY - bY), 
+            column_size - fmax(aY, bY) + fmin(aY,bY)
+         );
+}
+
 float topologicalDistance(int row_size, int a, int b)
 {
    int aX =  a % row_size;
@@ -57,7 +85,7 @@ float topologicalDistance(int row_size, int a, int b)
 
    int bX = b % row_size;
    int bY = ((int) b / row_size);
-
+   
    return fabs(aX - bX) + fabs(aY - bY);
 }
 
@@ -86,7 +114,8 @@ float euclidianDistance(float *v1, float *v2, int size)
 
 float potential(float *v1, float *v2, int size)
 {
-   return activation(euclidianDistance(v1, v2, size));
+   return activation(euclidianDistance(v1, v2, size)); // You can change the type of distance here
+   // either euclidianDistance or manhattanDistance
 }
 
 void findWinner(KOHONEN* map, float* input)
@@ -105,13 +134,14 @@ void findWinner(KOHONEN* map, float* input)
    }
 }
 
-void updateKohonen(KOHONEN* map, float* input)
+void updateKohonen(KOHONEN* map, float* input, float EPSILON)
 {
    findWinner(map, input);
 
    int total_size = map->sizeX * map->sizeY;
 
    for (int i = 0; i < total_size; i++) {
+      //float dist = loopTopologicalDistance(map->sizeX, map->sizeY, i, map->winner); // uncomment this for a loop neurone topology (view the loopTopologicalDistance function for more)
       float dist = topologicalDistance(map->sizeX, i, map->winner);
 
       for (int j = 0; j < map->sizeInput; j++) {
@@ -120,15 +150,14 @@ void updateKohonen(KOHONEN* map, float* input)
    }
 }
 
-void trainKohonen(KOHONEN* map, TRAINING_DATA* data)
+void trainKohonen(KOHONEN* map, TRAINING_DATA* data, int num_iter, float EPSILON)
 {
-   int num_iter = 1000;
    for (int i = 0; i < num_iter; i++) {
       // choose an input randomly
       int choice = rand() % data->numInput;
 
       // find the winner then update the neurones
-      updateKohonen(map, data->input[choice]);
+      updateKohonen(map, data->input[choice], EPSILON);
    }   
 }
 

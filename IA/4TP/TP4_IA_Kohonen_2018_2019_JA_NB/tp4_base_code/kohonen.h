@@ -1,8 +1,6 @@
 #ifndef KOHONEN_H
 #define KOHONEN_H
 
-#define EPSILON .5
-
 typedef struct kohonen {
    float **weight;
    float *input;
@@ -20,8 +18,8 @@ typedef struct training_data {
 
 KOHONEN *initKohonen(int, int, int, float (*func)(float));
 void freeKohonen(KOHONEN**);
-void updateKohonen(KOHONEN* map, float* input);
-void trainKohonen(KOHONEN* map, TRAINING_DATA* data);
+void updateKohonen(KOHONEN* map, float* input, float EPSILON);
+void trainKohonen(KOHONEN* map, TRAINING_DATA* data, int num_iter, float EPSILON);
 float potential(float *v1, float *v2, int size);
 TRAINING_DATA* initTrainingData(int sizeInput, int numInput);
 void freeTrainingData(TRAINING_DATA** data);
