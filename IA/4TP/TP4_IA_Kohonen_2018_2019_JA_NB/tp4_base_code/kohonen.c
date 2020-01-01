@@ -5,7 +5,7 @@
 
 #include "kohonen.h"
 
-KOHONEN *initKohonen(int sizeX, int sizeY, int sizeInput, float (*distfunc)(float))
+KOHONEN *initKohonen(int sizeX, int sizeY, int sizeInput, float (*distfunc)(float), float (*topDist)(int, int, int, int))
 {
    KOHONEN *map = malloc(sizeof(KOHONEN));
 
@@ -13,18 +13,14 @@ KOHONEN *initKohonen(int sizeX, int sizeY, int sizeInput, float (*distfunc)(floa
    map->sizeY = sizeY;
    map->sizeInput = sizeInput;
    map->phi = distfunc;
+   map->topDist = topDist;
+
 
    map->weight = malloc(sizeof(float*) * sizeX * sizeY);
 
    for (int i = 0; i < sizeX * sizeY; i++) {
-//      map->weight[i] = malloc(sizeof(float) * sizeInput);
       map->weight[i] = calloc(sizeInput, sizeof(float));
-
-/*      for (int k = 0; k < sizeInput; k++) {
-         map->weight[i][k] = rand() / RAND_MAX;
-      }
-*/
-      }
+   }
 
    map->input = calloc(sizeof(float), sizeInput);
 
@@ -50,7 +46,7 @@ void freeKohonen(KOHONEN **map)
    *map = NULL;
 }
 
-/**
+/** Pour un carte torique
  * A ring topology for the neurones ie the 0th and sizeX-1th neurones are neighbors
  * to find a loop (end of the path is at the start) for the traveling salesman problem
  */
@@ -61,7 +57,6 @@ float loopTopologicalDistance(int row_size, int column_size, int a, int b)
 
    int bX = b % row_size;
    int bY = ((int) b / row_size);
- 
 
    // --------o--------------o----------- // the two o's are the indices of the two we want to compare
    // ________o--------------o___________ // the reverse distance
@@ -78,14 +73,15 @@ float loopTopologicalDistance(int row_size, int column_size, int a, int b)
          );
 }
 
-float topologicalDistance(int row_size, int a, int b)
+float topologicalDistance(int row_size, int column_size, int a, int b)
 {
    int aX =  a % row_size;
    int aY = ((int) a / row_size);
 
    int bX = b % row_size;
    int bY = ((int) b / row_size);
-   
+   (void) column_size;
+
    return fabs(aX - bX) + fabs(aY - bY);
 }
 
@@ -141,8 +137,9 @@ void updateKohonen(KOHONEN* map, float* input, float EPSILON)
    int total_size = map->sizeX * map->sizeY;
 
    for (int i = 0; i < total_size; i++) {
-      //float dist = loopTopologicalDistance(map->sizeX, map->sizeY, i, map->winner); // uncomment this for a loop neurone topology (view the loopTopologicalDistance function for more)
-      float dist = topologicalDistance(map->sizeX, i, map->winner);
+      //float dist = loopTopologicalDistance(map->sizeX, map->sizeY, i, map->winner); 
+      // uncomment this for a loop neurone topology (view the loopTopologicalDistance function for more) <<< 
+      float dist = map->topDist(map->sizeX, map->sizeY, i, map->winner);
 
       for (int j = 0; j < map->sizeInput; j++) {
          map->weight[i][j] += EPSILON * (map->input[j] - map->weight[i][j]) * map->phi(dist);

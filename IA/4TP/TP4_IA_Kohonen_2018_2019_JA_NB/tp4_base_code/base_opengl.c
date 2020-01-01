@@ -14,6 +14,7 @@ utilise GL et glut
 #include <GL/glut.h>
 #include <time.h>
 #include <string.h>
+#include <limits.h>
 
 #include "base_opengl.h"
 #include "ppm.h"
@@ -21,8 +22,8 @@ utilise GL et glut
 
 #define DEFAULT_WIDTH  500
 #define DEFAULT_HEIGHT 500
-#define NB_VILLE 21
-#define MODE 0
+#define NB_VILLE 22
+#define MODE 0 // 1 FOR TRAVELING SALESMAN PROBLEM, 0 FOR IMAGE COMPRESSION
 
 int cpt = 0;
 int calc = 0;
@@ -87,7 +88,7 @@ void snapToData(KOHONEN* m, TRAINING_DATA* data)
          float dist = euclidianDistance(data->input[i], m->weight[j], data->sizeInput);
 
          // while making sure that it was not taken by another city
-         if(closestArg == -1 || (dist < closest && seen[j] == 0)) {
+         if((closestArg == -1 || dist < closest) && seen[j] == 0) {
             closestArg = j;
             closest = dist;
          }
@@ -349,22 +350,28 @@ int main(int argc, char **argv)
    }
 
    img = transform_img_to_vector(argv[1], &width, &height);
+   printf("Usage:\n"
+         "Press P to start learning \n"
+         "Press R to reset the neurones randomly\n");
+
 
 #if MODE
    load_cities();
 
    // INITIALIZING THE NETWORK
-   map = initKohonen(50, 1, 2, phi); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
+   map = initKohonen(50, 1, 2, phi, loopTopologicalDistance); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
    resetMap(map, 50, 750); // randomize the values of the weights
    DataSet = initialiseCitiesData(); // load the location of the cities into the training data
+   printf("Press S to snap the neurones to the data points\n");
 #else
 
    // INITIALIZING THE NETWORK
-   int numCol = 16; // can be 32, 256 for more colors
+   int numCol = 256; // can be 32, 256 for more colors <<<<<<<<<<<<<<<<<<
    int networkSize = log(numCol) / log(2.0);
-   map = initKohonen(networkSize, networkSize, 3, phi3); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
+   map = initKohonen(networkSize, networkSize, 3, phi3, topologicalDistance); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
    resetMap(map, 0, 256); // randomize the values of the weights
    DataSet = initialiseImageData(); // load the location of the cities into the training data
+   printf("Press S to save the compressed image\n");
 #endif
 
    /* GLUT init */
@@ -544,26 +551,27 @@ void writeCompressed()
    image->x = width;
    image->y = height;
 
-   image->data = malloc(sizeof(char) * 3 * width * height);
+   image->data = malloc(sizeof(unsigned char) * 3 * width * height);
+   
    for (int p = 0; p < width * height; p++) {
       int c = 3 * p;
       
-      int minval = 0.0;
+      int minval = INT_MAX;
       int argmin = -1;
       for(int i = 0; i < map->sizeX * map->sizeY; i++) {
-         float dist = (img[c + 0] + map->weight[i][0]) * (img[c + 0] + map->weight[i][0])
-                    + (img[c + 1] + map->weight[i][1]) * (img[c + 1] + map->weight[i][1]) 
-                    + (img[c + 2] + map->weight[i][2]) * (img[c + 2] + map->weight[i][2]);
+         float dist = (img[c + 0] - map->weight[i][0]) * (img[c + 0] - map->weight[i][0])
+                    + (img[c + 1] - map->weight[i][1]) * (img[c + 1] - map->weight[i][1]) 
+                    + (img[c + 2] - map->weight[i][2]) * (img[c + 2] - map->weight[i][2]);
          if(argmin == -1 || minval > dist) {
             minval = dist;
             argmin = i;
          }
       }
-      printf("Argmin = %d\n", argmin);
       image->data[p].r = map->weight[argmin][0];
       image->data[p].g = map->weight[argmin][1];
       image->data[p].b = map->weight[argmin][2];
    }
+
    writePPM("compressed.ppm", image);
 }
 
@@ -640,18 +648,15 @@ void clavierSpecial(int touche, int x, int y)
    switch(touche) {
    case GLUT_KEY_UP:
       EPSILON = fmin(EPSILON + 0.02, 2);
-      printf("Updated epsilon value %g\n", EPSILON);
       break;
 
    case GLUT_KEY_DOWN:
       EPSILON = fmax(EPSILON - 0.02, 0.01);
-      printf("Updated epsilon value %g\n", EPSILON);
       break;
 
    case GLUT_KEY_LEFT:
    case GLUT_KEY_RIGHT:
       EPSILON = 0.1;
-      printf("Updated epsilon value %g\n", EPSILON);
       break;
    }
 
