@@ -5,6 +5,9 @@
 
 #include "kohonen.h"
 
+/**
+ * Initialisation de réseau
+ */
 KOHONEN *initKohonen(int sizeX, int sizeY, int sizeInput, float (*distfunc)(float), float (*topDist)(int, int, int, int))
 {
    KOHONEN *map = malloc(sizeof(KOHONEN));
@@ -27,6 +30,9 @@ KOHONEN *initKohonen(int sizeX, int sizeY, int sizeInput, float (*distfunc)(floa
    return map;
 }
 
+/**
+ * Libération de mémoire de réseau
+ */
 void freeKohonen(KOHONEN **map)
 {
    int total_size = ((*map)->sizeX) * ((*map)->sizeY);
@@ -73,6 +79,9 @@ float loopTopologicalDistance(int row_size, int column_size, int a, int b)
          );
 }
 
+/**
+ * Distance topologique entre deux neurones
+ */
 float topologicalDistance(int row_size, int column_size, int a, int b)
 {
    int aX =  a % row_size;
@@ -85,11 +94,17 @@ float topologicalDistance(int row_size, int column_size, int a, int b)
    return fabs(aX - bX) + fabs(aY - bY);
 }
 
+/**
+ * Fonction d'activation de potentielle
+ */
 float activation(float x)
 {
    return 1 / (1 + x);
 }
 
+/**
+ * Distance manhattan (norme ordre 0)
+ */
 float manhattanDistance(float *v1, float *v2, int size)
 {
    float total_dist = 0.0;
@@ -99,6 +114,9 @@ float manhattanDistance(float *v1, float *v2, int size)
    return total_dist;
 }
 
+/**
+ * Distance euclidienne (norme ordre 1)
+ */
 float euclidianDistance(float *v1, float *v2, int size)
 {
    float total_dist = 0.0;
@@ -108,12 +126,18 @@ float euclidianDistance(float *v1, float *v2, int size)
    return sqrt(total_dist);
 }
 
+/**
+ * Fonction de potentielle
+ */
 float potential(float *v1, float *v2, int size)
 {
    return activation(euclidianDistance(v1, v2, size)); // You can change the type of distance here
    // either euclidianDistance or manhattanDistance
 }
 
+/**
+ * Chercher le neurones gagnant
+ */
 void findWinner(KOHONEN* map, float* input)
 {
    int total_size = map->sizeX * map->sizeY;
@@ -130,6 +154,9 @@ void findWinner(KOHONEN* map, float* input)
    }
 }
 
+/**
+ * Mise a jour de carte (le gagnant est stocké dans le structure)
+ */
 void updateKohonen(KOHONEN* map, float* input, float EPSILON)
 {
    findWinner(map, input);
@@ -147,6 +174,9 @@ void updateKohonen(KOHONEN* map, float* input, float EPSILON)
    }
 }
 
+/**
+ * Apprentissage de réseau
+ */
 void trainKohonen(KOHONEN* map, TRAINING_DATA* data, int num_iter, float EPSILON)
 {
    for (int i = 0; i < num_iter; i++) {
@@ -158,7 +188,9 @@ void trainKohonen(KOHONEN* map, TRAINING_DATA* data, int num_iter, float EPSILON
    }   
 }
 
-
+/**
+ * Initialisation de données d'entrainage
+ */
 TRAINING_DATA* initTrainingData(int numInput, int sizeInput)
 {
    TRAINING_DATA* data = malloc(sizeof(TRAINING_DATA));
@@ -174,6 +206,9 @@ TRAINING_DATA* initTrainingData(int numInput, int sizeInput)
    return data;
 }
 
+/**
+ * Libération mémoire de données d'entrainage
+ */
 void freeTrainingData(TRAINING_DATA** data)
 {
    for (int i = 0; i < (*data)->numInput; i++) {

@@ -23,7 +23,7 @@ utilise GL et glut
 #define DEFAULT_WIDTH  500
 #define DEFAULT_HEIGHT 500
 #define NB_VILLE 22
-#define MODE 0 // 1 FOR TRAVELING SALESMAN PROBLEM, 0 FOR IMAGE COMPRESSION
+#define MODE 1 // 1 FOR TRAVELING SALESMAN PROBLEM, 0 FOR IMAGE COMPRESSION
 
 int cpt = 0;
 int calc = 0;
@@ -43,19 +43,6 @@ unsigned char * img = NULL;
 float EPSILON = 0.1;
 KOHONEN* map;
 TRAINING_DATA* DataSet;
-
-/* Exercice 1: initilize the data with random values between 0, 200 */
-TRAINING_DATA* initialiseSet()
-{
-   TRAINING_DATA* DataSet = initTrainingData(20, 2);
-
-   for(int i = 0; i < 20; i++) {
-      DataSet->input[i][0] = rand() % 200;
-      DataSet->input[i][1] = rand() % 200;
-   }
-
-   return DataSet;
-}
 
 /* Reset the weights of the maps to random values between minval and maxval*/
 void resetMap(KOHONEN* m, int minval, int maxval)
@@ -122,6 +109,20 @@ void snapToData(KOHONEN* m, TRAINING_DATA* data)
    free(seen);
 }
 
+/** Exercice 1
+ * Initialisation aléatoire de données d'entrée
+ */
+TRAINING_DATA* initialiseRandomData()
+{
+   TRAINING_DATA* DataSet = initTrainingData(20, 2);
+
+   for (int i = 0; i < DataSet->numInput; i++) {
+      for (int j = 0; j < DataSet->sizeInput; j++) {
+         DataSet->input[i][j] = ((float)rand()) / ((float)RAND_MAX) * 200;
+      }
+   }
+   return DataSet;
+}
 
 /* Exercice 2
  * Initialize the training data to the cities' locations */
@@ -144,7 +145,7 @@ TRAINING_DATA* initialiseImageData()
 {
    // dividing the pixels of the image into blocks of size block_width x block_width 
    // so it works for larger images with much more pixels
-   int block_width = 1;
+   int block_width = 1; // 1 to use all the pixels as is
    TRAINING_DATA* DataSet = initTrainingData(width * height / (block_width * block_width), 3);
    
    int entryNum = 0;
@@ -173,6 +174,8 @@ TRAINING_DATA* initialiseImageData()
          entryNum++;
       }
    }
+
+   /*
    for(int i = 0; i < DataSet->numInput; i++) {
       int j = 3 * i;
       for (int x = 0; x < block_width; x++) {
@@ -183,11 +186,31 @@ TRAINING_DATA* initialiseImageData()
          }
       }
    }
+   */
 
    return DataSet;
 }
 
 float phi(float x)
+{
+   
+   float lambda = 0.4;
+   float beta = 0.05;
+   if(x < 1) {
+      return 1;
+   } else if(x < 2) {
+      return lambda;
+   } else if(x < 3) {
+      return -beta;
+   }
+
+   return 0;
+}
+
+/** 
+ * Pour exercice 2
+ */
+float phi2(float x)
 {
    float lambda = 0.4;
    float beta = 0.05;
@@ -205,6 +228,9 @@ float phi(float x)
    return 0;
 }
 
+/**
+ * Pour exercice 3
+ */
 float phi3(float x)
 {
    if(x < 1) {
@@ -352,21 +378,24 @@ int main(int argc, char **argv)
    img = transform_img_to_vector(argv[1], &width, &height);
    printf("Usage:\n"
          "Press P to start learning \n"
-         "Press R to reset the neurones randomly\n");
-
+         "Press R to reset the neurones randomly\n"
+         "Use arrows to change the value of epsilon\n"
+         "\tUp arrow to increase the value\n"
+         "\tDown to decrease\n"
+         "\tLeft and right to reset to 0.1\n");
 
 #if MODE
    load_cities();
 
    // INITIALIZING THE NETWORK
-   map = initKohonen(50, 1, 2, phi, loopTopologicalDistance); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
+   map = initKohonen(50, 1, 2, phi2, loopTopologicalDistance); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
    resetMap(map, 50, 750); // randomize the values of the weights
    DataSet = initialiseCitiesData(); // load the location of the cities into the training data
    printf("Press S to snap the neurones to the data points\n");
 #else
 
    // INITIALIZING THE NETWORK
-   int numCol = 256; // can be 32, 256 for more colors <<<<<<<<<<<<<<<<<<
+   int numCol = 16; // can be 32, 256 for more colors <<<<<<<<<<<<<<<<<<
    int networkSize = log(numCol) / log(2.0);
    map = initKohonen(networkSize, networkSize, 3, phi3, topologicalDistance); // takes the sizeX, sizeY, size of input vector, function callback for the neighborhood function phi
    resetMap(map, 0, 256); // randomize the values of the weights
@@ -377,11 +406,13 @@ int main(int argc, char **argv)
    /* GLUT init */
    glutInit(&argc, argv);            // Initialize GLUT
    glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
+
 #if MODE
    glutInitWindowSize(width, height);   // Set the window's initial width & height
 #else
    glutInitWindowSize(512, 512);   // Set the window's initial width & height
 #endif
+
    glutCreateWindow("Kohonen");      // Create window with the name of the executable
 
    /* enregistrement des fonctions de rappel */
@@ -424,28 +455,14 @@ int main(int argc, char **argv)
 /* Helper for HSLtoRGB */
 float HueToRgb(float p, float q, float t)
 {
-   if (t < 0.0f) {
-      t += 1.0f;
-   }
-
-   if (t > 1.0f) {
-      t -= 1.0f;
-   }
-
-   if (t < 1.0f / 6.0f) {
-      return p + (q - p) * 6.0f * t;
-   }
-
-   if (t < 1.0f / 2.0f) {
-      return q;
-   }
-
-   if (t < 2.0f / 3.0f) {
-      return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
-   }
-
+   if (t < 0.0f) t += 1.0f;
+   if (t > 1.0f) t -= 1.0f;
+   if (t < 1.0f / 6.0f) return p + (q - p) * 6.0f * t;
+   if (t < 1.0f / 2.0f) return q;
+   if (t < 2.0f / 3.0f) return p + (q - p) * (2.0f / 3.0f - t) * 6.0f;
    return p;
 }
+
 /* Convert HSL (Hue, Saturation, Lightness) color to RGB
  * Used to make the sliding color effect on the neurones display */
 void HSLtoRGB(float H, float S, float L, float *R, float *G, float *B)
@@ -461,7 +478,7 @@ void HSLtoRGB(float H, float S, float L, float *R, float *G, float *B)
    }
 }
 
-/**
+/** Pour exercice 2
  * Draw the network
  */
 void drawKohonen2D(KOHONEN* m)
@@ -518,6 +535,9 @@ void drawKohonen2D(KOHONEN* m)
 
 }
 
+/** Pour exercice 3
+ * Draw the color matrix 
+ */
 void drawKohonenRGB(KOHONEN* m)
 {
    int wx = 256 / m->sizeX,
@@ -545,6 +565,9 @@ void drawKohonenRGB(KOHONEN* m)
    }
 }
 
+/** Pour exercice 3
+ * Ecriture de l'image compressé
+ */
 void writeCompressed()
 {
    Image* image = malloc(sizeof(Image));
@@ -643,6 +666,10 @@ void idle()
       glutPostRedisplay();
    }
 }
+
+/** 
+ * Pour traiter les fléches 
+ */
 void clavierSpecial(int touche, int x, int y)
 {
    switch(touche) {

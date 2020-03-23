@@ -62,13 +62,13 @@ les neurones avec les connections topologique entre eux, et pour le
 controle, $P$ pour commencer et arrêter l'apprentissage, $S$ pour
 chercher le chemin trouvé par le réseau, $R$ pour réinitialiser les
 valeurs des poids aléatoirement, $Q$ pour quitter.\\
-\vspace{2mm}
+\vspace{1mm}
 
 Pour l'execice 3 (MODE=0) affiche les couleurs trouvés dans le réseau
 et qui serons utilisé dans l'image compressé, pour le contrôle $S$ pour
 sauvegarder l'image compressé sous le nom $compressed.ppm$.\\
 
-\vspace{4mm}
+\vspace{1mm}
 \paragraph{Carte Torique:}\\
    Pour utiliser une carte torique, il faut changer la fonction pour la
 distance topologique (passé à la fonction d'initialisation de réseau
@@ -95,7 +95,13 @@ Avec des dvn et dvp plus larges, l'apprentissage prend plus de temps
 et le chemin trouvé est moins efficace, parce que le réseau est moins compétitif
 
 \subsubsection{ }
-Phénomène négatifs
+le mauvais phénomène qui se produit est que les neurones commencent à s'espacer
+et à s'éloigner de plus en plus, cela apparaît lorsque la valeur du bêta est
+assez grande, parce que lors de la mise à jour des neurones, nous éloignons
+toujours les seconds voisins du neurone gagnant, et avec un bêta assez grand
+ces neurones pourront s'éloigner énormément des autres neurones, créant ainsi
+une boucle d'éloignement puisqu'ils ne sont plus jamais sélectionnés comme
+gagnants parce qu'ils sont loin des données.
 
 \end{itemize}
 \section{Exercice 2}
@@ -103,8 +109,8 @@ Phénomène négatifs
    Il faut plus de 22 neurones pour résoudre le probléme, parce que il existe 22
 entrées de location, et il faut au moins un neurone par location, dans
 l'implementation j'ai utilisé 50 neurones.\\
-\vspace{2mm}
-
+\vspace{1mm}
+\hspace{0mm}
 Les poids de neurones dans leur ordre topologique serons le chemin solution.\\
 
 \subsection{Questions}
@@ -148,7 +154,7 @@ taille 3.
 \end{figure}
 
 
-\vspace{2mm}
+\vspace{1mm}
 \subsubsection{ }
 Le nombre de bits pour un seul composant couleur (RGB): $\log_2{256} = 8$.\\
 Pour un pixel RGB: $8 * 3 = 24$.\\
@@ -160,10 +166,30 @@ petit que l'image noir et blanc.
 
 \subsection{Questions}
 \subsubsection{ }
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=25em]{comp.png}
+   \caption{Compression avec 16 couleurs}
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=25em]{comp32.png}
+   \caption{Compression avec 32 couleurs}
+\end{figure}
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=25em]{comp256.png}
+   \caption{Compression avec 256 couleurs}
+\end{figure}
 
 \subsubsection{ }
+Le probléme c'est que les tailles de l'image compressé et l'originale
+sont les mêmes. Pour régler ça, il faut utliser un format different pour le
+stockage de l'image (à la place de .ppm), ce format doit exploiter le fait que
+nous n'utilisons qu'un nombre de couleurs prédéfini pour notre image 
 
-\subsubsection{ }
 
 
 \end{document}

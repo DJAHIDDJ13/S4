@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="olympics" schema="public" type="PostgreSQL - 10.5 (Debian 10.5-1)">
+   <tables>
+      <table name="athlete" numRows="21415" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="athlete_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="athlete_name" nullable="false" remarks="" size="64" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="athlete_gender" nullable="true" remarks="" size="10" type="varchar"/>
+         <primaryKey column="athlete_id" sequenceNumberInPK="1"/>
+         <index name="athlete_pkey" unique="true">
+            <column ascending="true" name="athlete_id"/>
+         </index>
+      </table>
+      <table name="City" numRows="23" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="city_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="1" name="noc" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="city_id" nullable="true" remarks="" size="19" type="int8"/>
+      </table>
+      <table name="City2" numRows="23" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="city_id" nullable="true" remarks="" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="1" name="city_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="NOC" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="ix_City2_city_id" unique="false">
+            <column ascending="true" name="city_id"/>
+         </index>
+      </table>
+      <table name="CountryCode" numRows="201" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="country_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="1" name="noc" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="isocode" nullable="true" remarks="" size="2147483647" type="text"/>
+      </table>
+      <table name="Discipline" numRows="57" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="sport_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="1" name="discipline_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="discipline_id" nullable="true" remarks="" size="19" type="int8"/>
+      </table>
+      <table name="Event" numRows="30101" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="event_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="1" name="event_gender" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="edition" nullable="true" remarks="" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="3" name="city_id" nullable="true" remarks="" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="4" name="discipline_id" nullable="true" remarks="" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="5" name="event_id" nullable="true" remarks="" size="19" type="int8"/>
+      </table>
+      <table name="Medal" numRows="63188" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="athlete_id" nullable="true" remarks="" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="1" name="event_id" nullable="true" remarks="" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="2" name="represent_noc" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="medal_type" nullable="true" remarks="" size="2147483647" type="text"/>
+      </table>
+   </tables>
+</database>

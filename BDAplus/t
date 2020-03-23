@@ -1,0 +1,1 @@
+java -jar schemaspy-6.0.0.jar -t pgsql -db olympics -host localhost -u postgres -p 123456 -o ./schemaspy -dp postgresql-42.2.5.jar -s public -noads

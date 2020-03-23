@@ -1,0 +1,1000 @@
+ 1604  vim tp1.c 
+ 1605  male
+ 1606  make
+ 1607  ./tp1 
+ 1608  vim tp1.c 
+ 1609  make
+ 1610  ./tp1 
+ 1611  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1612  vim tp1.c 
+ 1613  make
+ 1614  ./tp1 
+ 1615  feh closed.pgm 
+ 1616  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1617  vim tp1.c 
+ 1618  make
+ 1619  ./tp1 
+ 1620  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1621  vim tp1.c 
+ 1622  make
+ 1623  ./tp1 
+ 1624  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1625  vim tp1.c 
+ 1626  make
+ 1627  ./tp1 
+ 1628  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1629  vim tp1.c 
+ 1630  make
+ 1631  ./tp1 
+ 1632  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1633  vim tp1.c 
+ 1634  make
+ 1635  ./tp1 
+ 1636  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1637  make
+ 1638  vim tp1.c 
+ 1639  make
+ 1640  ./tp1 
+ 1641  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1642  vim tp1.c 
+ 1643  make
+ 1644  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1645  vim tp1.c 
+ 1646  make
+ 1647  ./tp1 
+ 1648  feh ../Images/Test/carreTrou.pgm closed.pgm 
+ 1649  vim tp1.c 
+ 1650  make
+ 1651  ./tp1 
+ 1652  feh opened.pgm 
+ 1653  feh ../Images/Test/carreBruit.pgm closed.pgm 
+ 1654  vim tp1.c 
+ 1655  feh ../Images/Test/carreBruit.pgm closed.pgm 
+ 1656  vim tp1.c 
+ 1657  make
+ 1658  vim tp1.c 
+ 1659  make
+ 1660  vim tp1.c 
+ 1661  make
+ 1662  vim tp1.c 
+ 1663  make
+ 1664  vim tp1.c 
+ 1665  make
+ 1666  vim tp1.c 
+ 1667  make
+ 1668  mkdir ../Images/Sequences/out/Fomd
+ 1669  mkdir ../Images/Sequences/out/
+ 1670  mkdir ../Images/Sequences/out/Fomd
+ 1671  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1672  vim tp1.c 
+ 1673  make
+ 1674  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1675  vim tp1.c 
+ 1676  make
+ 1677  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1678  vim tp1.c 
+ 1679  make
+ 1680  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1681  vim tp1.c 
+ 1682  make
+ 1683  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1684  make
+ 1685  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1686  vim tp1.c 
+ 1687  make
+ 1688  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1689  vim tp1.c 
+ 1690  make
+ 1691  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1692  vim tp1.c 
+ 1693  make
+ 1694  vim tp1.c 
+ 1695  make
+ 1696  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1697  vim tp1.c 
+ 1698  make
+ 1699  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1700  vim tp1.c 
+ 1701  make
+ 1702  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1703  vim tp1.c 
+ 1704  make
+ 1705  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1706  vim tp1.c 
+ 1707  make
+ 1708  ./tp1 
+ 1709  vim tp1.c 
+ 1710  make
+ 1711  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1712  vim tp1.c 
+ 1713  make
+ 1714  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1715  vim tp1.c 
+ 1716  make
+ 1717  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1718  vim tp1.c 
+ 1719  mae
+ 1720  make
+ 1721  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1722  vim tp1.c 
+ 1723  make
+ 1724  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1725  vim tp1.c 
+ 1726  make
+ 1727  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1728  vim tp1.c 
+ 1729  make
+ 1730  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1731  vim tp1.c 
+ 1732  make
+ 1733  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1734  vim tp1.c 
+ 1735  make
+ 1736  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1737  vim tp1.c 
+ 1738  gdb ./tp1 
+ 1739  vim tp1.c 
+ 1740  make
+ 1741  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1742  gdb ./tp1 
+ 1743  vim tp1.c 
+ 1744  make
+ 1745  gdb ./tp1 
+ 1746  vim tp1.c 
+ 1747  make
+ 1748  gdb ./tp1 
+ 1749  clear
+ 1750  l
+ 1751  vim tp1.c 
+ 1752  ake
+ 1753  make
+ 1754  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1755  vim tp1.c 
+ 1756  vim nrio.h 
+ 1757  vim nrio.c
+ 1758  vim tp1.c 
+ 1759  gdb ./tp1 
+ 1760  clea
+ 1761  clear
+ 1762  ls
+ 1763  feh ../Images/Sequences/Fomd/ppm/fomd*
+ 1764  gdb ./tp1 
+ 1765  vim tp1.c 
+ 1766  make
+ 1767  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1768  vim tp1.c 
+ 1769  feh ../Images/Sequences/Fomd/ppm/fomd*
+ 1770  vim tp1.c 
+ 1771  make
+ 1772  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1773  clea
+ 1774  clear
+ 1775  ls
+ 1776  clear
+ 1777  ls
+ 1778  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1779  ls
+ 1780  feh ../Images/Sequences/out/Fomd/diff*
+ 1781  vim tp1.c 
+ 1782  make
+ 1783  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1784  make
+ 1785  vim tp1.c 
+ 1786  make
+ 1787  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1788  vim tp1.c 
+ 1789  make
+ 1790  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1791  vim tp1.c 
+ 1792  make
+ 1793  vim tp1.c 
+ 1794  make
+ 1795  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1796  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd
+ 1797  vim tp1.c 
+ 1798  make
+ 1799  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd
+ 1800  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1801  vim tp1.c 
+ 1802  mak
+ 1803  make
+ 1804  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1805  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd
+ 1806  vim tp1.c 
+ 1807  make
+ 1808  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd
+ 1809  vim tp1.c 
+ 1810  gdb ./tp1 
+ 1811  vim tp1.c 
+ 1812  make
+ 1813  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd
+ 1814  git status
+ 1815  git add .
+ 1816  ls
+ 1817  vim tp1.c 
+ 1818  make
+ 1819  vim tp1.c 
+ 1820  make
+ 1821  vim tp1.c 
+ 1822  make
+ 1823  vim tp1.c 
+ 1824  make
+ 1825  vim tp1.c 
+ 1826  make
+ 1827  vim tp1.c 
+ 1828  make
+ 1829  vim tp1.c 
+ 1830  make
+ 1831  vim tp1.c 
+ 1832  make
+ 1833  vim tp1.c 
+ 1834  make
+ 1835  vim tp1.c 
+ 1836  make
+ 1837  vim tp1.c 
+ 1838  make
+ 1839  vim tp1.c 
+ 1840  make
+ 1841  ./tp1 ../Images/Sequences/Fomd/ppm/
+ 1842  gdb ./tp1 
+ 1843  vim tp1.c 
+ 1844  make
+ 1845  vim tp1.c 
+ 1846  make
+ 1847  vim tp1.c 
+ 1848  make
+ 1849  vim tp1.c 
+ 1850  make
+ 1851  ./tp1 ../Images/Sequences/Fomd/ppm/
+ 1852  gdb ./tp1 
+ 1853  vim tp1.c 
+ 1854  make
+ 1855  ./tp1 ../Images/Sequences/Fomd/ppm/
+ 1856  gdb ./tp1 
+ 1857  vim tp1.c 
+ 1858  make
+ 1859  ./tp1 ../Images/Sequences/Fomd/ppm/
+ 1860  vim tp1.c 
+ 1861  make
+ 1862  ./tp1 ../Images/Sequences/Fomd/ppm/
+ 1863  feh avg.ppm 
+ 1864  vim tp1.c 
+ 1865  make
+ 1866  vim tp1.c 
+ 1867  make
+ 1868  vim tp1.c 
+ 1869  make
+ 1870  vim tp1.c 
+ 1871  make
+ 1872  vim tp1.c 
+ 1873  make
+ 1874  vim tp1.c 
+ 1875  make
+ 1876  vim tp1.c 
+ 1877  make
+ 1878  vim tp1.c 
+ 1879  make
+ 1880  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1881  gdb ./tp1 
+ 1882  vim tp1.c 
+ 1883  gdb ./tp1 
+ 1884  gdbtui ./tp1
+ 1885  clear
+ 1886  vim tp1.c 
+ 1887  make
+ 1888  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1889  ls
+ 1890  rm avg.ppm 
+ 1891  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1892  feh avg.ppm 
+ 1893  vim tp1.c 
+ 1894  make
+ 1895  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1896  gdbtui ./tp1
+ 1897  vim ~/.gdbinit
+ 1898  make
+ 1899  gdb ./tp1 
+ 1900  gdbtui ./tp1 
+ 1901  vim ~/.gdbinit 
+ 1902  pip install pygments
+ 1903  pip3 install pygments
+ 1904  gdbtui ./tp1 
+ 1905  gdb ./tp1 
+ 1906  clear
+ 1907  ls
+ 1908  gdbtui ./tp1 
+ 1909  export LC_CTYPE=C.UTF-8
+ 1910  gdbtui ./tp1 
+ 1911  gdb -v
+ 1912  gdbtui ./tp1 
+ 1913  gdb ./tp1
+ 1914  vim tp1.c 
+ 1915  make
+ 1916  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1917  gdb ./tp1 
+ 1918  vim tp1.c 
+ 1919  make
+ 1920  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1921  feh ../Images/Sequences/out/Fomd/diff*
+ 1922  vim tp1.c 
+ 1923  make
+ 1924  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1925  feh ../Images/Sequences/out/Fomd/*
+ 1926  vim tp1.c 
+ 1927  make
+ 1928  vim tp1.c 
+ 1929  make
+ 1930  vim tp1.c 
+ 1931  make
+ 1932  vim tp1.c 
+ 1933  make
+ 1934  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1935  vim tp1.c 
+ 1936  make
+ 1937  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1938  vim tp1.c 
+ 1939  make
+ 1940  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1941  vim tp1.c 
+ 1942  make
+ 1943  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1944  gdb ./tp1 
+ 1945  vim tp1.c 
+ 1946  make
+ 1947  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1948  feh median.ppm 
+ 1949  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1950  feh median.ppm 
+ 1951  vim tp1.c 
+ 1952  make
+ 1953  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1954  feh median.ppm 
+ 1955  vim tp1.c 
+ 1956  make
+ 1957  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1958  feh median.ppm 
+ 1959  vim tp1.c 
+ 1960  make
+ 1961  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1962  feh median.ppm 
+ 1963  vim tp1.c 
+ 1964  make
+ 1965  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1966  feh median.ppm 
+ 1967  vim tp1.c 
+ 1968  make
+ 1969  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1970  feh median.ppm 
+ 1971  vim tp1.c 
+ 1972  male
+ 1973  time ./tp1 ..
+ 1974  ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1975  time ./tp1 ../Images/Sequences/Fomd/ppm/ 
+ 1976  feh median.ppm 
+ 1977  vim tp1.c 
+ 1978  make
+ 1979  ./tp1 ../Images/Sequences/Fomd/ppm/ ../Images/Sequences/out/Fomd/
+ 1980  feh  ../Images/Sequences/out/Fomd/*
+ 1981  feh median.ppm 
+ 1982  feh  ../Images/Sequences/out/Fomd/*
+ 1983  vim tp1.c 
+ 1984  make
+ 1985  vim tp1.c 
+ 1986  cd ../SujetsTPs/
+ 1987  ls
+ 1988  evince M1TI_TP2.pdf 
+ 1989  evince M1TI_TP3.pdf 
+ 1990  ls
+ 1991  man dirent
+ 1992  man opendir
+ 1993  man scandir
+ 1994  ls ../Images/
+ 1995  ls ../Images/Sequences/Fomd/
+ 1996  ls ../Images/Sequences/Fomd/ppm/
+ 1997  man opendir
+ 1998  man calloc
+ 1999  df -H
+ 2000  /home/ls
+ 2001  ls
+ 2002  ll ..
+ 2003  ls
+ 2004  mv bin_leto_prom_orig/ bin_leto_prom ../home/ 
+ 2005  ls
+ 2006  df
+ 2007  df -H
+ 2008  ls
+ 2009  cd Desktop/
+ 2010  ls
+ 2011  mv promethe/ ../../home/
+ 2012  l
+ 2013  df -H
+ 2014  cd /home/
+ 2015  ls
+ 2016  clear
+ 2017  l
+ 2018  du -H .
+ 2019  du -H 
+ 2020  du . -H 
+ 2021  man du
+ 2022  du -h
+ 2023  du -hs
+ 2024  ls
+ 2025  clear
+ 2026  sl
+ 2027  cd .
+ 2028  cd ..
+ 2029  cd ~/De
+ 2030  cd ~/Desktop/
+ 2031  ls
+ 2032  cd MicroMouse/i
+ 2033  cd MicroMouse/
+ 2034  l
+ 2035  clear
+ 2036  ls
+ 2037  git status
+ 2038  ls
+ 2039  clear
+ 2040  ls
+ 2041  rm Simulation/ -r
+ 2042  git status
+ 2043  git clear
+ 2044  ls
+ 2045  cd ..
+ 2046  ls
+ 2047  rm MicroMouse/ -r
+ 2048  ls
+ 2049  git clone https://www.github.com/djahiddj13/Micromouse
+ 2050  cd Micromouse/
+ 2051  clear
+ 2052  ls
+ 2053  git status
+ 2054  cd src/
+ 2055  ls
+ 2056  cd MM_brain/
+ 2057  ls
+ 2058  cd src/
+ 2059  ls
+ 2060  clear
+ 2061  ls
+ 2062  cd ..
+ 2063  ls
+ 2064  make
+ 2065  vim Makefile 
+ 2066  ls
+ 2067  git restore Makefile
+ 2068  ls
+ 2069  git status
+ 2070  mkdir obj
+ 2071  ls
+ 2072  cd bin/
+ 2073  ls
+ 2074  cd ..
+ 2075  ls
+ 2076  vim .gitignore
+ 2077  git status
+ 2078  git add .gitignore 
+ 2079  ls
+ 2080  git statsu
+ 2081  git status
+ 2082  cd bin/
+ 2083  git status
+ 2084  cd ..
+ 2085  git rm --cached 
+ 2086  git update-index --assume-unchanged .
+ 2087  ls
+ 2088  git status
+ 2089  cd ..
+ 2090  ls
+ 2091  git status
+ 2092  ls
+ 2093  cd  MM_brain/
+ 2094  ls
+ 2095  cd bin/
+ 2096  ls
+ 2097  rm *
+ 2098  cd ..
+ 2099  ls
+ 2100  git status
+ 2101  git restore .
+ 2102  git status
+ 2103  rm .gitignore 
+ 2104  git status
+ 2105  git restore .g
+ 2106  git restore .gitignore
+ 2107  git status
+ 2108  clear
+ 2109  ls
+ 2110  l
+ 2111  rm .gitignore 
+ 2112  ls
+ 2113  cd ..
+ 2114  git status
+ 2115  rm -r Micromouse/
+ 2116  ls
+ 2117  git clone https://www.github.com/djahiddj13/Micromouse
+ 2118  cd Micromouse/
+ 2119  ls
+ 2120  clear
+ 2121  ls
+ 2122  cd src/
+ 2123  ls
+ 2124  cd MM_brain/
+ 2125  ls
+ 2126  mkdir obj
+ 2127  git status
+ 2128  ls
+ 2129  git status
+ 2130  ls
+ 2131  clear
+ 2132  ls
+ 2133  make
+ 2134  ls
+ 2135  bin/MM_brain 
+ 2136  bin/flood_fill_test 
+ 2137  bin/queue_test 
+ 2138  clear
+ 2139  ls
+ 2140  cd src/
+ 2141  ls
+ 2142  vim box.c 
+ 2143  clear
+ 2144  ls
+ 2145  vim queue.c 
+ 2146  vim ma
+ 2147  vim maze.c 
+ 2148  clear
+ 2149  ls
+ 2150  vim micromouse.c 
+ 2151  clear
+ 2152  ls
+ 2153  vim position.c
+ 2154  ls
+ 2155  vim main.c 
+ 2156  vim brain.c 
+ 2157  cd ..
+ 2158  ls
+ 2159  vim include/
+ 2160  cd src/
+ 2161  ls
+ 2162  vim position.c 
+ 2163  vim ../include/
+ 2164  ls
+ 2165  vim ../include/
+ 2166  vim position.c 
+ 2167  vim ../include/
+ 2168  vim ../include/position.h
+ 2169  vim position.c 
+ 2170  vim ../include/
+ 2171  vim position.c 
+ 2172  vim ../include/
+ 2173  vim position.c 
+ 2174  vim ../include/
+ 2175  vim position.c 
+ 2176  ls
+ 2177  cd ..
+ 2178  ls
+ 2179  cd tests/
+ 2180  ls
+ 2181  vim pos_estim_test.c
+ 2182  vim queue_test.c 
+ 2183  vim pos_estim_test.c 
+ 2184  vim ../include/
+ 2185  vim ../src/
+ 2186  vim ../include/
+ 2187  vim ../src/
+ 2188  vim ../include/
+ 2189  ls
+ 2190  vim pos_estim_test.c 
+ 2191  cd ..
+ 2192  l
+ 2193  vim Makefile 
+ 2194  make
+ 2195  vim include/
+ 2196  make
+ 2197  make clean
+ 2198  make
+ 2199  vim src/
+ 2200  make clean
+ 2201  make
+ 2202  vim include/
+ 2203  make
+ 2204  make clean
+ 2205  make
+ 2206  :q
+ 2207  vim src/
+ 2208  make
+ 2209  make clean
+ 2210  mak
+ 2211  make
+ 2212  vim include/
+ 2213  vim src/
+ 2214  vim tests/pos_estim_test.c 
+ 2215  make
+ 2216  clear
+ 2217  ls
+ 2218  make
+ 2219  vim include/position.h 
+ 2220  make
+ 2221  clear
+ 2222  ls
+ 2223  make
+ 2224  vim src/position.c 
+ 2225  make
+ 2226  clear
+ 2227  ls
+ 2228  make
+ 2229  vim include/micromouse.h 
+ 2230  vim src/position.c 
+ 2231  make
+ 2232  vim include/position.h 
+ 2233  vim src/position.c 
+ 2234  vim include/position.h 
+ 2235  make
+ 2236  vim include/position.h 
+ 2237  make
+ 2238  ls bin/
+ 2239  ls
+ 2240  make
+ 2241  make clean
+ 2242  make
+ 2243  make test 
+ 2244  vim tests/pos_estim_test.c 
+ 2245  ls
+ 2246  vim tests/pos_estim_test.c 
+ 2247  make test 
+ 2248  vim include/position.h 
+ 2249  vim tests/pos_estim_test.c 
+ 2250  vim include/position.h 
+ 2251  vim src/position.c 
+ 2252  vim tests/pos_estim_test.c 
+ 2253  make
+ 2254  make test 
+ 2255  ./bin/pos_estim_test 
+ 2256  vim src/position.c 
+ 2257  vim tests/pos_estim_test.c 
+ 2258  make
+ 2259  vim include/position.h 
+ 2260  make
+ 2261  ./bin/pos_estim_test 
+ 2262  ls
+ 2263  vim src/position.c 
+ 2264  make
+ 2265  make test 
+ 2266  ./bin/pos_estim_test 
+ 2267  vim tests/pos_estim_test.c 
+ 2268  make
+ 2269  make test 
+ 2270  vim tests/pos_estim_test.c 
+ 2271  make
+ 2272  make test 
+ 2273  ./bin/pos_estim_test 
+ 2274  vim tests/pos_estim_test.c 
+ 2275  make
+ 2276  make te
+ 2277  make test 
+ 2278  ./bin/pos_estim_test 
+ 2279  vim tests/pos_estim_test.c 
+ 2280  make test 
+ 2281  ./bin/pos_estim_test 
+ 2282  vim tests/pos_estim_test.c 
+ 2283  make
+ 2284  make test 
+ 2285  ./bin/pos_estim_test 
+ 2286  vim tests/pos_estim_test.c 
+ 2287  make
+ 2288  make test 
+ 2289  ./bin/pos_estim_test 
+ 2290  :wq
+ 2291  ls
+ 2292  clear
+ 2293  ls
+ 2294  git stats
+ 2295  cd ..
+ 2296  ls
+ 2297  git status
+ 2298  ls
+ 2299  make clean
+ 2300  ls
+ 2301  cd ..
+ 2302  cd src/MM_brain/
+ 2303  make cleaa
+ 2304  make clean
+ 2305  make test 
+ 2306  make clean
+ 2307  make
+ 2308  make clean
+ 2309  git status
+ 2310  git add .
+ 2311  git status
+ 2312  git commit -am "position estimation"
+ 2313  git status
+ 2314  lls
+ 2315  ls
+ 2316  clear
+ 2317  ls
+ 2318  clear
+ 2319  ls
+ 2320  git status
+ 2321  git diff Makefile
+ 2322  git diff Makefile HEAD
+ 2323  git diff Makefile HEAD~1
+ 2324  git status
+ 2325  git push origin master 
+ 2326  git status
+ 2327  git log
+ 2328  git push origin master 
+ 2329  vim tests/pos_estim_test.c 
+ 2330  make test 
+ 2331  ./bin/pos_estim_test 
+ 2332  vim tests/pos_estim_test.c 
+ 2333  ls
+ 2334  cd 
+ 2335  ls
+ 2336  cd Desktop/BDAplus/
+ 2337  ls
+ 2338  clear
+ 2339  ls
+ 2340  vim insert_r_db.py
+ 2341  python3 insert_r_db.py 
+ 2342  vim insert_r_db.py
+ 2343  python3 insert_r_db.py 
+ 2344  vim insert_r_db.py
+ 2345  python3 insert_r_db.py 
+ 2346  vim insert_r_db.py
+ 2347  python3 insert_r_db.py 
+ 2348  vim insert_r_db.py
+ 2349  python3 insert_r_db.py 
+ 2350  vim insert_r_db.py
+ 2351  python3 insert_r_db.py 
+ 2352  service postgresql start
+ 2353  python3 insert_r_db.py 
+ 2354  vim insert_r_db.py
+ 2355  python3 insert_r_db.py 
+ 2356  vim insert_r_db.py
+ 2357  python3 insert_r_db.py 
+ 2358  vim insert_r_db.py
+ 2359  python3 insert_r_db.py 
+ 2360  vim insert_r_db.py
+ 2361  python3 insert_r_db.py 
+ 2362  vim insert_r_db.py
+ 2363  python3 insert_r_db.py 
+ 2364  vim insert_r_db.py
+ 2365  python3 insert_r_db.py 
+ 2366  vim insert_r_db.py
+ 2367  python3 insert_r_db.py 
+ 2368  vim insert_r_db.py
+ 2369  python3 insert_r_db.py 
+ 2370  vim insert_r_db.py
+ 2371  python3 insert_r_db.py 
+ 2372  vim insert_r_db.py
+ 2373  python3 insert_r_db.py 
+ 2374  vim insert_r_db.py
+ 2375  python3 insert_r_db.py 
+ 2376  vim insert_r_db.py
+ 2377  python3 insert_r_db.py 
+ 2378  vim insert_r_db.py
+ 2379  python3 insert_r_db.py 
+ 2380  vim insert_r_db.py
+ 2381  python3 insert_r_db.py 
+ 2382  vim insert_r_db.py
+ 2383  python3 insert_r_db.py 
+ 2384  vim insert_r_db.py
+ 2385  vim olympics_data/sportstaxonomy.csv 
+ 2386  vim insert_r_db.py
+ 2387  vim olympics_data/sportstaxonomy.csv 
+ 2388  vim insert_r_db.py
+ 2389  vim olympics_data/sportstaxonomy.csv 
+ 2390  python3 insert_r_db.py 
+ 2391  vim insert_r_db.py
+ 2392  python3 insert_r_db.py 
+ 2393  vim insert_r_db.py
+ 2394  python3 insert_r_db.py 
+ 2395  vim insert_r_db.py
+ 2396  python3 insert_r_db.py 
+ 2397  vim insert_r_db.py
+ 2398  python3 insert_r_db.py 
+ 2399  vim insert_r_db.py
+ 2400  python3 insert_r_db.py 
+ 2401  vim insert_r_db.py
+ 2402  python3 insert_r_db.py 
+ 2403  vim insert_r_db.py
+ 2404  python3 insert_r_db.py 
+ 2405  vim insert_r_db.py
+ 2406  python3 insert_r_db.py 
+ 2407  vim insert_r_db.py
+ 2408  python3 insert_r_db.py 
+ 2409  vim insert_r_db.py
+ 2410  python3 insert_r_db.py 
+ 2411  clear
+ 2412  python3 insert_r_db.py 
+ 2413  vim insert_r_db.py
+ 2414  python3 insert_r_db.py 
+ 2415  vim insert_r_db.py
+ 2416  python3 insert_r_db.py 
+ 2417  vim insert_r_db.py
+ 2418  python3 insert_r_db.py 
+ 2419  vim insert_r_db.py
+ 2420  python3 insert_r_db.py 
+ 2421  vim insert_r_db.py
+ 2422  python3 insert_r_db.py 
+ 2423  vim olympics_data/medallists.csv 
+ 2424  vim insert_r_db.py
+ 2425  clear
+ 2426  python3 insert_r_db.py 
+ 2427  vim insert_r_db.py
+ 2428  python3 insert_r_db.py 
+ 2429  vim insert_r_db.py
+ 2430  python3 insert_r_db.py 
+ 2431  vim insert_r_db.py
+ 2432  python3 insert_r_db.py 
+ 2433  vim insert_r_db.py
+ 2434  python3 insert_r_db.py 
+ 2435  vim insert_r_db.py
+ 2436  python3 insert_r_db.py 
+ 2437  vim insert_r_db.py
+ 2438  python3 insert_r_db.py 
+ 2439  vim insert_r_db.py
+ 2440  python3 insert_r_db.py 
+ 2441  vim insert_r_db.py
+ 2442  python3 insert_r_db.py 
+ 2443  vim insert_r_db.py
+ 2444  python3 insert_r_db.py 
+ 2445  vim insert_r_db.py
+ 2446  vim create_r_db.sql 
+ 2447  cp create_r_db.sql create_r_db2.sql 
+ 2448  vim create_r_db.sql 
+ 2449  vim drop_r_db.sql 
+ 2450  psql --username=postgres --host=localhost --dbname=olympics
+ 2451  psql --username=postgres --host=localhost --dbname=olympics --file=drop_r_db.sql 
+ 2452  psql --username=postgres --host=localhost --dbname=olympics --file=create_r_db
+ 2453  psql --username=postgres --host=localhost --dbname=olympics --file=create_r_db.sql 
+ 2454  clear
+ 2455  ls
+ 2456  python3 insert_r_db.py 
+ 2457  vim insert_r_db.py
+ 2458  python3 insert_r_db.py 
+ 2459  vim insert_r_db.py
+ 2460  python3 insert_r_db.py 
+ 2461  vim insert_r_db.py
+ 2462  python3 insert_r_db.py 
+ 2463  vim insert_r_db.py
+ 2464  python3 insert_r_db.py 
+ 2465  vim insert_r_db.py
+ 2466  python3 insert_r_db.py 
+ 2467  vim insert_r_db.py
+ 2468  vim olympics_data/medallists.csv 
+ 2469  vim insert_r_db.py
+ 2470  vim olympics_data/medallists.csv 
+ 2471  python3 insert_r_db.py 
+ 2472  vim olympics_data/medallists.csv 
+ 2473  vim insert_r_db.py
+ 2474  vim olympics_data/medallists.csv 
+ 2475  python3 insert_r_db.py 
+ 2476  vim olympics_data/
+ 2477  vim olympics_data/medallists.csv 
+ 2478  vim insert_r_db.py
+ 2479  python3 insert_r_db.py 
+ 2480  vim insert_r_db.py
+ 2481  vim ~/.bash
+ 2482  vim ~/.bashrc 
+ 2483  vim ~/.vimrc 
+ 2484  vim insert_r_db.py
+ 2485  vim ~/.vimrc 
+ 2486  vim insert_r_db.py
+ 2487  python3 insert_r_db.py 
+ 2488  ls
+ 2489  clear
+ 2490  ls
+ 2491  vim insert_r_db.py
+ 2492  python3 insert_r_db.py 
+ 2493  vim insert_r_db.py
+ 2494  python3 insert_r_db.py 
+ 2495  vim insert_r_db.py
+ 2496  python3 insert_r_db.py 
+ 2497  vim insert_r_db.py
+ 2498  python3 insert_r_db.py 
+ 2499  vim insert_r_db.py
+ 2500  python3 insert_r_db.py 
+ 2501  vim insert_r_db.py
+ 2502  python3 insert_r_db.py 
+ 2503  vim insert_r_db.py
+ 2504  python3 insert_r_db.py 
+ 2505  vim insert_r_db.py
+ 2506  python3 insert_r_db.py 
+ 2507  vim insert_r_db.py
+ 2508  python3 insert_r_db.py 
+ 2509  vim insert_r_db.py
+ 2510  python3 insert_r_db.py 
+ 2511  vim insert_r_db.py
+ 2512  python3 insert_r_db.py 
+ 2513  vim insert_r_db.py
+ 2514  python3 insert_r_db.py 
+ 2515  vim insert_r_db.py
+ 2516  python3 insert_r_db.py 
+ 2517  vim insert_r_db.py
+ 2518  python3 insert_r_db.py 
+ 2519  vim insert_r_db.py
+ 2520  python3 insert_r_db.py 
+ 2521  vim insert_r_db.py
+ 2522  python3 insert_r_db.py 
+ 2523  vim insert_r_db.py
+ 2524  python3 insert_r_db.py 
+ 2525  vim insert_r_db.py
+ 2526  python3 insert_r_db.py 
+ 2527  vim insert_r_db.py
+ 2528  python3 insert_r_db.py 
+ 2529  vim insert_r_db.py
+ 2530  python3 insert_r_db.py 
+ 2531  vim insert_r_db.py
+ 2532  python3 insert_r_db.py 
+ 2533  vim insert_r_db.py
+ 2534  python3 insert_r_db.py 
+ 2535  vim insert_r_db.py
+ 2536  python3 insert_r_db.py 
+ 2537  vim insert_r_db.py
+ 2538  python3 insert_r_db.py 
+ 2539  vim insert_r_db.py
+ 2540  python3 insert_r_db.py 
+ 2541  vim insert_r_db.py
+ 2542  python3 insert_r_db.py 
+ 2543  vim insert_r_db.py
+ 2544  python3 insert_r_db.py 
+ 2545  vim insert_r_db.py
+ 2546  python3 insert_r_db.py 
+ 2547  vim insert_r_db.py
+ 2548  python3 insert_r_db.py 
+ 2549  vim insert_r_db.py
+ 2550  python3 insert_r_db.py 
+ 2551  vim insert_r_db.py
+ 2552  python3 insert_r_db.py 
+ 2553  vim insert_r_db.py
+ 2554  python3 insert_r_db.py 
+ 2555  vim insert_r_db.py
+ 2556  python3 insert_r_db.py 
+ 2557  vim insert_r_db.py
+ 2558  python3 insert_r_db.py 
+ 2559  vim insert_r_db.py
+ 2560  python3 insert_r_db.py 
+ 2561  vim insert_r_db.py
+ 2562  python3 insert_r_db.py 
+ 2563  vim insert_r_db.py
+ 2564  python3 insert_r_db.py 
+ 2565  vim insert_r_db.py
+ 2566  python3 insert_r_db.py 
+ 2567  vim insert_r_db.py
+ 2568  python3 insert_r_db.py 
+ 2569  vim insert_r_db.py
+ 2570  python3 insert_r_db.py 
+ 2571  vim insert_r_db.py
+ 2572  python3 insert_r_db.py 
+ 2573  vim insert_r_db.py
+ 2574  python3 insert_r_db.py 
+ 2575  vim insert_r_db.py
+ 2576  python3 insert_r_db.py 
+ 2577  vim insert_r_db.py
+ 2578  python3 insert_r_db.py 
+ 2579  vim insert_r_db.py
+ 2580  python3 insert_r_db.py 
+ 2581  vim insert_r_db.py
+ 2582  python3 insert_r_db.py 
+ 2583  vim insert_r_db.py
+ 2584  python3 insert_r_db.py 
+ 2585  vim insert_r_db.py
+ 2586  python3 insert_r_db.py 
+ 2587  vim insert_r_db.py
+ 2588  python3 insert_r_db.py 
+ 2589  vim insert_r_db.py
+ 2590  python3 insert_r_db.py 
+ 2591  vim insert_r_db.py
+ 2592  python3 insert_r_db.py 
+ 2593  vim insert_r_db.py
+ 2594  python3 insert_r_db.py 
+ 2595  vim insert_r_db.py
+ 2596  vim create_r_db
+ 2597  vim create_r_db.sql 
+ 2598  vim insert_r_db.py
+ 2599  vim create_r_db.sql 
+ 2600  python3 insert_r_db.py 
+ 2601  ls
+ 2602  history
+ 2603  history > less
