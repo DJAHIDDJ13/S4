@@ -1,0 +1,61 @@
+#!/usr/bin/python3
+import psycopg2
+import sys
+import pprint
+import pandas as pd
+
+def main():
+    conn_string = "host='localhost' dbname='olympics' user='postgres' password='123456'"
+    # print the connection string we will use to connect
+    print(f"Connecting to database\n\t-> {conn_string}")
+ 
+    # get a connection, if a connect cannot be made an exception will be raised here
+    conn = psycopg2.connect(conn_string)
+ 
+    # conn.cursor will return a cursor object, you can use this cursor to perform queries
+    cursor = conn.cursor()
+    print("Connected!\n")
+
+    # Reading the csv file data as pandas dataframes
+    cities = pd.read_csv('olympics_data/cities.csv', header=0)
+
+    # For some reason the first two lines of the medallist csv are empty,
+    # (ignoring the comments)
+    medal = pd.read_csv('olympics_data/medallists.csv', header=2, comment='"')
+    
+    # Here the na_filter=False is necessary since the country code for namibia
+    # is NA which is interpreted as NaN by pandas
+    ioc = pd.read_csv('olympics_data/ioccountrycodes.csv', header=0, na_filter=False)
+    ioc.rename({'Country': 'Country_name'})
+
+
+    sports = pd.read_csv('olympics_data/sportstaxonomy.csv', header=0)
+    
+
+    print(cities)
+    print(medal)
+    print(ioc)
+    print(sports)
+    
+    print(medal['Medal'].value_counts())
+
+    # Insert the data
+    # CountryCodea
+    # cursor.execute("INSERT INTO CountryCode() Values")
+    ioc.to_sql('CountryCode', con=conn, if_exists='replace') 
+
+    # execute our Query
+    # cursor.execute("SELECT * FROM my_table")
+
+
+    # retrieve the records from the database
+    #records = cursor.fetchall()
+
+    # print out the records using pretty print
+    # note that the NAMES of the columns are not shown, instead just indexes.
+    # for most people this isn't very useful so we'll show you how to return
+    # columns as a dictionary (hash) in the next example.
+    #pprint.pprint(records)
+ 
+if __name__ == "__main__":
+    main()

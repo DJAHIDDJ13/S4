@@ -1,0 +1,8 @@
+CountryCode
+city
+athlete
+City2
+Discipline
+Event
+EventActivity
+Medal
