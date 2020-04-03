@@ -1,0 +1,221 @@
+    1  clear
+    2  ls
+    3  clear
+    4  gedit a.c
+    5  nano a.c
+    6  ls
+    7  clear
+    8  cd Downloads/
+    9  ls
+   10  ./arm
+   11  sudo ./arm
+   12  chmod +x arm
+   13  ./arm 
+   14  chmod +x arm_x86 
+   15  ./arm_x86 
+   16  clear
+   17  mv * ~
+   18  clear
+   19  cd ~
+   20  ls
+   21  mkdir TP
+   22  mkdir TP/TP1
+   23  mv arm* TP/TP1/
+   24  clear
+   25  ls
+   26  cd Tp
+   27  cd TP/
+   28  ls
+   29  cd TP1/
+   30  ./arm
+   31  clear
+   32  cd ..
+   33  mkdir TP2
+   34  clear
+   35  sudo raspi-config 
+   36  sudo lsmod
+   37  sudo lsmod | grep camera
+   38  clear
+   39  sudo lsmod
+   40  clear
+   41  raspistill -v -o test.jpg
+   42  reboot 
+   43  clear
+   44  raspistill -v -o test.jpg
+   45  clear
+   46  sudo apt-get install libopencv-dev
+   47  sudo apt-get update
+   48  sudo apt-get update --fix-missing
+   49  sudo apt-get update
+   50  datze
+   51  date
+   52  timedatectl 
+   53  reboot
+   54  git clone https://www.github.com/cedricve/raspicam
+   55  ls
+   56  cd raspicam/
+   57  mkdir build
+   58  cd build/
+   59  cmake ..
+   60  make
+   61  sudo make install
+   62  sudo ldconfig
+   63  clear
+   64  cd ..
+   65  clear
+   66  exit
+   67  date -s ""
+   68  date -s "2020-02-12 17:45:00"
+   69  sudo date -s "2020-02-12 17:45:00"
+   70  sudo apt-get update
+   71  ls
+   72  clear
+   73  ls
+   74  sudo apt-get install libopencv-dev
+   75  ls
+   76  clear
+   77  sudo dpkg -i *
+   78  ls
+   79  cd TP/TP2/
+   80  ls
+   81  vim edge_detect.c
+   82  vi edge_detect.c
+   83  ls
+   84  vi edge_detect.c
+   85  ls
+   86  apt-get install vim
+   87  sudo apt-get install vim
+   88  vim edge_detect.c 
+   89  clear
+   90  g++ edge_detect.c -o edge_detect pkg-config --cflags --libs opencv 
+   91  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+   92  vim edge_detect.c 
+   93  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+   94  vim edge_detect.c 
+   95  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+   96  ./edge_detect 
+   97  vim edge_detect.c 
+   98  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+   99  vim edge_detect.c 
+  100  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+  101  vim edge_detect.c 
+  102  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+  103  ./edge_detect 
+  104  vim edge_detect.c 
+  105  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+  106  ./edge_detect 
+  107  vim edge_detect.c 
+  108  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+  109  vim edge_detect.c 
+  110  ls
+  111  raspistill -v -o test.jpg
+  112  vim edge_detect.c 
+  113  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+  114  ./edge_detect 
+  115  vim edge_detect.c 
+  116  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+  117  ./edge_detect 
+  118  vim edge_detect.c 
+  119  g++ edge_detect.c -o edge_detect `pkg-config --cflags --libs opencv`
+  120  ./edge_detect 
+  121  vim edge_detect.c 
+  122  clear
+  123  ls
+  124  showrgb test.jpg 
+  125  clear
+  126  ./edge_detect 
+  127  ls
+  128  vim test.c
+  129  ls
+  130  mv test.c raspicam.c
+  131  vim raspicam.c 
+  132  ls
+  133  vim raspicam.c 
+  134  mv edge_detect.c edge_detect.cpp
+  135  ls
+  136  mv raspicam.c raspicam.cpp
+  137  vim raspicam.cpp 
+  138  g++ raspicam.cpp -o raspicam -I /usr/local/include/ -lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui
+  139  g++ raspicam.cpp -o raspicam -I/usr/local/include/ -lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui
+  140  g++ raspicam.cpp -o raspicam -I /usr/local/include/ -lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui
+  141  ls ~
+  142  sudo apt-get cmake 
+  143  sudo apt-get install cmake 
+  144  clear
+  145  g++ raspicam.cpp -o raspicam -I /usr/local/include/ -lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui
+  146  vim raspicam.cpp 
+  147  clear
+  148  g++ raspicam.cpp -o raspicam -I /usr/local/include/ -lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui
+  149  ls
+  150  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui
+  151  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ `-lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui`
+  152  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui
+  153  cat /etc/ld.so.conf
+  154  cat /etc/ld.so.conf.d/libc.conf 
+  155  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui
+  156  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui -lmmal -lmmal_core -lmmal_util
+  157  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui
+  158  ls /usr/local/include/
+  159  ls /usr/local/include/raspicam/
+  160  clear
+  161  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui
+  162  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -llopencv_core -lopencv_highgui
+  163  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui
+  164  sudo apt show libopencv-dev
+  165  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lmmal -lmmal_core -lmmal_util
+  166  echo CREATE_OPENCV_MODULE
+  167  echo ${CREATE_OPENCV_MODULE}
+  168  echo $(CREATE_OPENCV_MODULE)
+  169  cd raspicam/build/
+  170  ls
+  171  sudo make install
+  172  cmake ..
+  173  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lmmal -lmmal_core -lmmal_util
+  174  cd ..
+  175  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lmmal -lmmal_core -lmmal_util
+  176  ldconfig -p | grep libmmal
+  177  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lmmal -lmmal_core -lmmal_util
+  178  export LIBRARY_PATH=/opt/vc/lib
+  179  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lmmal -lmmal_core -lmmal_util
+  180  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui
+  181  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui -lmmal -lmmal_core -lmmal_util
+  182  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lmmal -lmmal_core -lmmal_util
+  183  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lmmal -lmmal_core -lmmal_util
+  184  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lmmal -lmmal_core -lmmal_util
+  185  LIBS += -L/usr/local/lib -lopencv_shape -lopencv_videoio
+  186  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_shape -lopencv_videoio -lmmal -lmmal_core -lmmal_util
+  187  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_shape -L /usr/local/lib/libraspicam_cv.so -L /usr/local/lib/libraspicam.so -lopencv_videoio -lmmal -lmmal_core -lmmal_util
+  188  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_shape -lopencv_flann -lopencv_videoio -lmmal -lmmal_core -lmmal_util
+  189  g++ raspicam.cpp -o raspicam_test -I /usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -L /usr/local/lib/ -lopencv_imgcodecs -lopencv_highgui -lmmal -lmmal_core -lmmal_util
+  190  ./raspicam_test 
+  191  ls
+  192  l s
+  193  clea
+  194  rls
+  195  clear
+  196  ls
+  197  cd MagPi/
+  198  ls
+  199  cd ..
+  200  ls
+  201  cd T
+  202  cd TP/
+  203  ls
+  204  cd TP2/
+  205  ls
+  206  cd ..
+  207  mkdir TP3
+  208  ls
+  209  cd TP3/
+  210  ls
+  211  clear
+  212  ls
+  213  vim pixel.cpp
+  214  cd ..
+  215  cd TP2/
+  216  ks
+  217  ls
+  218  vim edge_detect.cpp 
+  219  vim raspicam.cpp 
+  220  history
+  221  history > commands.txt
